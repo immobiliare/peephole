@@ -5,6 +5,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	_config "gitlab.rete.farm/dpucci/peephole/config"
+	_kiosk "gitlab.rete.farm/dpucci/peephole/kiosk"
 	_spy "gitlab.rete.farm/dpucci/peephole/spy"
 )
 
@@ -31,6 +32,9 @@ func main() {
 	if spy, err = _spy.Init(config.Spy); err != nil {
 		logrus.WithError(err).Fatalln("unable to get config")
 	}
+
+	logrus.Infoln("Starting kiosk server")
+	_kiosk.Serve()
 
 	logrus.WithField("endpoints", len(spy.Endpoints())).Infoln("Starting spying")
 	if err := spy.Watch(); err != nil {

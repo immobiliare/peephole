@@ -5,6 +5,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	_config "gitlab.rete.farm/dpucci/peephole/config"
+	_mold "gitlab.rete.farm/dpucci/peephole/mold"
 	_salt "gitlab.rete.farm/dpucci/peephole/salt-api"
 )
 
@@ -39,10 +40,35 @@ func (s *Spy) Endpoints() (e []string) {
 }
 
 func (s *Spy) Watch() error {
+	peephole := make(chan *_salt.EventsResponse, len(s.endpoints))
 	for k, v := range s.endpoints {
-		if err := _salt.Events(k, v); err != nil {
-			return err
+		go func(endpoint, token string, peephole chan *_salt.EventsResponse) {
+			if err := _salt.Events(endpoint, token, peephole); err != nil {
+				logrus.WithError(err).Fatalln("Unable to watch for events")
+			}
+		}(k, v, peephole)
+	}
+
+	for {
+		e := <-peephole
+		logrus.WithFields(logrus.Fields{
+			"Endpoint": e.Endpoint,
+			"Tag":      e.Tag,
+		}).Debugln("Event received")
+
+		if e.Type != _salt.EventData {
+			continue
+		}
+
+		o, err := _mold.Parse(e.Endpoint, e.Tag, e.Data)
+		if err != nil {
+			logrus.WithError(err).Errorln("Unable to parse event")
+		} else if o == nil {
+			continue
+		}
+
+		if err := _mold.Persist(o); err != nil {
+			logrus.WithError(err).Errorln("Unable to save events")
 		}
 	}
-	return nil
 }

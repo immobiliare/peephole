@@ -26,10 +26,11 @@ var (
 )
 
 type EventsResponse struct {
-	Type  int
-	Tag   string
-	Data  string
-	Retry int64
+	Endpoint string
+	Type     int
+	Tag      string
+	Data     string
+	Retry    int64
 }
 
 func init() {
@@ -38,7 +39,7 @@ func init() {
 	}
 }
 
-func Events(endpoint, token string) error {
+func Events(endpoint, token string, peephole chan *EventsResponse) error {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/events", endpoint), http.NoBody)
 	if err != nil {
 		return err
@@ -61,13 +62,17 @@ func Events(endpoint, token string) error {
 		block = append(block, line)
 		if line == "" {
 			if response, err := unmarshal(block); err == nil {
-				// tunnel <- response
-				logrus.WithFields(logrus.Fields{
-					"type": EventTypes[response.Type],
-					"tag":  response.Tag,
-					// "data":  response.Data,
-					// "retry": response.Retry,
-				}).Debugln("Event received")
+				response.Endpoint = endpoint
+				peephole <- response
+				if response.Tag != "salt/auth" {
+					logrus.WithFields(logrus.Fields{
+						"type":     EventTypes[response.Type],
+						"endpoint": response.Endpoint,
+						"tag":      response.Tag,
+						"data":     response.Data,
+						// "retry": response.Retry,
+					}).Debugln("Event received")
+				}
 			} else {
 				return err
 			}
