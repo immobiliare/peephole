@@ -33,7 +33,7 @@ func Login(endpoint, user, pass, client string) (*LoginResponse, error) {
 	logrus.WithFields(logrus.Fields{
 		"endpoint": endpoint,
 		"user":     user,
-		"pass":     pass,
+		"pass":     strings.Repeat("*", len(pass)),
 		"client":   client,
 	}).Debugln("Logging in")
 	reqParams := url.Values{}

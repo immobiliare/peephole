@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -16,11 +17,25 @@ const (
 	EventUnknown
 )
 
+var (
+	EventTypes = map[int]string{
+		EventRetry:   "Retry",
+		EventData:    "Data",
+		EventUnknown: "Unknown",
+	}
+)
+
 type EventsResponse struct {
 	Type  int
 	Tag   string
 	Data  string
 	Retry int64
+}
+
+func init() {
+	if os.Getenv("DEBUG") != "" {
+		logrus.SetLevel(logrus.DebugLevel)
+	}
 }
 
 func Events(endpoint, token string) error {
@@ -48,11 +63,11 @@ func Events(endpoint, token string) error {
 			if response, err := unmarshal(block); err == nil {
 				// tunnel <- response
 				logrus.WithFields(logrus.Fields{
-					"type":  response.Type,
-					"tag":   response.Tag,
-					"data":  response.Data,
-					"retry": response.Retry,
-				}).Errorln("got a response")
+					"type": EventTypes[response.Type],
+					"tag":  response.Tag,
+					// "data":  response.Data,
+					// "retry": response.Retry,
+				}).Debugln("Event received")
 			} else {
 				return err
 			}
@@ -80,6 +95,7 @@ func unmarshal(block []string) (*EventsResponse, error) {
 
 func unmarshalRetry(block []string) (*EventsResponse, error) {
 	// not really needed
+	// let's just mark the message per type
 	r := EventsResponse{Type: EventRetry}
 	// for _, msg := range block {
 	// 	if strings.HasPrefix("retry:") {
@@ -96,9 +112,15 @@ func unmarshalData(block []string) (*EventsResponse, error) {
 	)
 	for _, msg := range block {
 		if strings.HasPrefix(msg, "tag:") {
+			// tag prefix drop
 			msgTag = strings.Split(msg, "tag: ")[1]
 		} else if strings.HasPrefix(msg, "data:") {
-			msgData = strings.Split(msg, "data: ")[1]
+			// tag/data prefixes drop
+			// sample line expected:
+			// `data: {"tag": "whatevert-tag", "data": { ... }}``
+			msgData = strings.Replace(msg, fmt.Sprintf(`data: {"tag": "%s", "data": `, msgTag), "", 1)
+			// trailing curly bracket
+			msgData = msgData[:len(msgData)-1]
 		}
 	}
 	return &EventsResponse{Type: EventData, Tag: msgTag, Data: msgData}, nil
