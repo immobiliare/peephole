@@ -8,19 +8,7 @@ import (
 )
 
 const (
-	fnHighstate = iota
-	fnState
-	fnOrchestrate
-	_
 	timestampLayout = "2006-01-02T15:04:05.000000"
-)
-
-var (
-	FnType = map[int]string{
-		fnHighstate:   "highstate",
-		fnState:       "state",
-		fnOrchestrate: "orchestrate",
-	}
 )
 
 type Event struct {
@@ -29,7 +17,7 @@ type Event struct {
 	Tag       string
 	Jid       string
 	RawData   string
-	Function  int
+	Function  string
 	Timestamp time.Time
 	Success   bool
 }
@@ -56,7 +44,7 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 }
 
 func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
-	e.Function = fnHighstate
+	e.Function = "highstate"
 	e.Minion = j.Get("id").String()
 	e.Jid = j.Get("jid").String()
 	e.Success = j.Get("retcode").Int() == 0
@@ -67,7 +55,7 @@ func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
 }
 
 func parseState(e *Event, j *gjson.Result) (*Event, error) {
-	e.Function = fnState
+	e.Function = "state apply"
 	e.Minion = j.Get("id").String()
 	e.Jid = j.Get("jid").String()
 	e.Success = j.Get("success").Bool()
@@ -78,7 +66,7 @@ func parseState(e *Event, j *gjson.Result) (*Event, error) {
 }
 
 func parseOrchestrate(e *Event, j *gjson.Result) (*Event, error) {
-	e.Function = fnOrchestrate
+	e.Function = "orchestrate"
 	e.Minion = j.Get("fun_args.0.pillar.event_data.id").String()
 	e.Jid = j.Get("jid").String()
 	e.Success = j.Get("success").Bool()
