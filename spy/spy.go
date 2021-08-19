@@ -75,7 +75,7 @@ func (s *Spy) Watch() error {
 			"Master":   o.Master,
 			"Minion":   o.Minion,
 			"Jid":      o.Jid,
-			"Function": _mold.FnType[o.Function],
+			"Function": o.Function,
 		}).Println("Event persisted, gonna fire it through channel")
 		s.EventChan <- o
 	}
