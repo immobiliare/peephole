@@ -56,19 +56,18 @@ func (s *Spy) Watch() error {
 			"Tag":      e.Tag,
 		}).Debugln("Event received")
 
-		if e.Type != _salt.EventData {
-			continue
-		}
-
 		o, err := _mold.Parse(e.Endpoint, e.Tag, e.Data)
 		if err != nil {
 			logrus.WithError(err).Errorln("Unable to parse event")
-		} else if o == nil {
-			continue
 		}
 
 		if err := _mold.Persist(o); err != nil {
 			logrus.WithError(err).Errorln("Unable to save events")
 		}
+
+		logrus.WithFields(logrus.Fields{
+			"Endpoint": e.Endpoint,
+			"Tag":      e.Tag,
+		}).Debugln("Event persisted")
 	}
 }

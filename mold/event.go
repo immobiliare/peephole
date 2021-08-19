@@ -1,16 +1,16 @@
 package mold
 
 import (
-	"encoding/json"
+	"fmt"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	"github.com/tidwall/gjson"
 )
 
 const (
-	FnHighstate = iota
-	FnOrchestrate
-	FnSls
+	fnHighstate = iota
+	fnSls
+	fnOrchestrate
 	_
 	timestampLayout = "2006-01-02T15:04:05.000000"
 )
@@ -19,50 +19,58 @@ type Event struct {
 	Master    string
 	Minion    string
 	RawData   string
-	Function  string
+	Function  int
 	Timestamp time.Time
 	Success   bool
 }
 
 func Parse(endpoint, tag, data string) (*Event, error) {
+	if !gjson.Valid(data) {
+		return nil, fmt.Errorf("data structure is not a valid JSON")
+	}
 	var (
-		jsonData map[string]interface{}
-		e        = &Event{Master: endpoint, RawData: data}
+		e = Event{Master: endpoint, RawData: data}
+		j = gjson.Parse(data)
 	)
 
-	if tag == "salt/auth" {
-		return nil, nil
+	fun := j.Get("fun").String()
+	if fun == "state.highstate" {
+		return parseHighstate(&e, &j)
+	} else if fun == "state.sls" || fun == "state.apply" {
+		return parseSls(&e, &j)
+	} else if fun == "runner.state.orchestrate" {
+		return parseOrchestrate(&e, &j)
 	}
 
-	logrus.Errorln(data)
-	if err := json.Unmarshal([]byte(data), &jsonData); err != nil {
-		return nil, err
-	}
-
-	if _, ok := jsonData["fun"]; !ok {
-		return nil, nil
-	}
-	e.Function = jsonData["fun"].(string)
-	if e.Function == "runner.state.orchestrate" {
-		return parseOrchestrate(e, jsonData)
-	} else {
-		return e, nil
-	}
+	return nil, fmt.Errorf("unmanaged type %s", fun)
 }
 
-func parseOrchestrate(e *Event, data map[string]interface{}) (*Event, error) {
-	dataFunArgs := data["fun_args"].([]interface{})
-	dataPillar := dataFunArgs[0].(map[string]interface{})["pillar"].(map[string]interface{})
-	dataEvent := dataPillar["event_data"].(map[string]interface{})
-
-	e.Minion = dataEvent["id"].(string)
-	e.Success = dataEvent["retcode"].(float64) == 0
-
-	if t, err := time.Parse(timestampLayout, dataEvent["_stamp"].(string)); err != nil {
-		return nil, err
-	} else {
-		e.Timestamp = t
+func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
+	e.Function = fnHighstate
+	e.Minion = j.Get("id").String()
+	e.Success = j.Get("retcode").Int() == 0
+	if d, err := time.Parse(timestampLayout, j.Get("_stamp").String()); err == nil {
+		e.Timestamp = d
 	}
+	return e, nil
+}
 
+func parseSls(e *Event, j *gjson.Result) (*Event, error) {
+	e.Function = fnSls
+	e.Minion = j.Get("id").String()
+	e.Success = j.Get("success").Bool()
+	if d, err := time.Parse(timestampLayout, j.Get("_stamp").String()); err == nil {
+		e.Timestamp = d
+	}
+	return e, nil
+}
+
+func parseOrchestrate(e *Event, j *gjson.Result) (*Event, error) {
+	e.Function = fnOrchestrate
+	e.Minion = j.Get("fun_args.0.pillar.event_data.id").String()
+	e.Success = j.Get("success").Bool()
+	if d, err := time.Parse(timestampLayout, j.Get("_stamp").String()); err == nil {
+		e.Timestamp = d
+	}
 	return e, nil
 }

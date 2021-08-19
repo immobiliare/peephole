@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -12,17 +13,18 @@ import (
 )
 
 const (
-	EventRetry = iota
-	EventData
-	EventUnknown
+	eventRetry = iota
+	eventData
+	eventUnknown
 )
 
 var (
-	EventTypes = map[int]string{
-		EventRetry:   "Retry",
-		EventData:    "Data",
-		EventUnknown: "Unknown",
+	eventTypes = map[int]string{
+		eventRetry:   "Retry",
+		eventData:    "Data",
+		eventUnknown: "Unknown",
 	}
+	eventTagRegex = regexp.MustCompile(`(?m)(salt/run/[0-9]{20}/ret|salt/job/[0-9]{20}/ret/.*)`)
 )
 
 type EventsResponse struct {
@@ -57,21 +59,23 @@ func Events(endpoint, token string, peephole chan *EventsResponse) error {
 		block   []string
 		scanner = bufio.NewScanner(resp.Body)
 	)
+	// max batch size: 32, max message size: 4MB
+	scanner.Buffer(make([]byte, 1024*1024), 128*1024*1024)
 	for scanner.Scan() {
 		line := strings.Trim(scanner.Text(), "\n ")
 		block = append(block, line)
 		if line == "" {
 			if response, err := unmarshal(block); err == nil {
 				response.Endpoint = endpoint
-				peephole <- response
-				if response.Tag != "salt/auth" {
+				if eventTagRegex.Match([]byte(response.Tag)) {
 					logrus.WithFields(logrus.Fields{
-						"type":     EventTypes[response.Type],
+						"type":     eventTypes[response.Type],
 						"endpoint": response.Endpoint,
 						"tag":      response.Tag,
 						"data":     response.Data,
 						// "retry": response.Retry,
 					}).Debugln("Event received")
+					peephole <- response
 				}
 			} else {
 				return err
@@ -94,14 +98,14 @@ func unmarshal(block []string) (*EventsResponse, error) {
 	} else if _util.HasAnyPrefix(block, "tag:") && _util.HasAnyPrefix(block, "data:") {
 		return unmarshalData(block)
 	} else {
-		return &EventsResponse{Type: EventUnknown}, nil
+		return &EventsResponse{Type: eventUnknown}, nil
 	}
 }
 
 func unmarshalRetry(block []string) (*EventsResponse, error) {
 	// not really needed
 	// let's just mark the message per type
-	r := EventsResponse{Type: EventRetry}
+	r := EventsResponse{Type: eventRetry}
 	// for _, msg := range block {
 	// 	if strings.HasPrefix("retry:") {
 	// 		r.Retry, err = strconv.ParseInt(strings.Split(msg, "retry: ")[1], 10, 64)
@@ -128,5 +132,5 @@ func unmarshalData(block []string) (*EventsResponse, error) {
 			msgData = msgData[:len(msgData)-1]
 		}
 	}
-	return &EventsResponse{Type: EventData, Tag: msgTag, Data: msgData}, nil
+	return &EventsResponse{Type: eventData, Tag: msgTag, Data: msgData}, nil
 }
