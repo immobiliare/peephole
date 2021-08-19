@@ -30,10 +30,10 @@ func Init(eventChan chan *_mold.Event, config *_config.Kiosk) *Kiosk {
 	k.router = gin.Default()
 	k.eventChan = eventChan
 	k.router.LoadHTMLGlob("kiosk/assets/templates/*html")
+	k.router.Static("/assets", "kiosk/assets/static")
 	k.router.GET("/ping", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "pong"}) })
 
 	_priv := k.router.Group("/", gin.BasicAuth(gin.Accounts(config.BasicAuth)))
-	_priv.Static("/assets", "kiosk/assets/static")
 	_priv.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", gin.H{"title": "Peephole"}) })
 	_priv.GET("/events", func(c *gin.Context) {
 		if e, err := _mold.Select(); err != nil {
