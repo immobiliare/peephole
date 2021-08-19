@@ -7,6 +7,7 @@ html {
     color: var(--primary);
     background-color: var(--primary-bg);
     font-family: 'Roboto', sans-serif;
+    padding: 20px;
 }
 
 body {
@@ -30,6 +31,12 @@ header img {
     width: 40px;
 }
 
+p.loading {
+    text-align: center;
+    font-size: 1.5em;
+    color: var(--darker);
+}
+
 ul.event-list {
     list-style-type: none;
     padding: 0;
@@ -37,8 +44,18 @@ ul.event-list {
 
 ul.event-list>li {
     background-color: var(--darker-bg);
-    border-radius: 10px;
     padding: 15px;
+    margin-top: 3px;
+}
+
+ul.event-list>li:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+ul.event-list>li:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 ul.event-list>li>div.event {
@@ -66,9 +83,10 @@ ul.event-list>li>div.event>a.show {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 0;
+    right: 15px;
     text-transform: uppercase;
-    padding: 10px;
+    padding: 15px;
+    border-top-left-radius: 5px;
 }
 
 ul.event-list>li>div.event>a.show:hover {

@@ -36,7 +36,8 @@ func Init(eventChan chan *_mold.Event, config *_config.Kiosk) *Kiosk {
 	_priv := k.router.Group("/", gin.BasicAuth(gin.Accounts(config.BasicAuth)))
 	_priv.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", gin.H{"title": "Peephole"}) })
 	_priv.GET("/events", func(c *gin.Context) {
-		if e, err := _mold.Select(); err != nil {
+		// TODO: do select without RawData here
+		if e, err := _mold.Select(15); err != nil {
 			c.Error(err)
 		} else {
 			c.JSON(http.StatusOK, e)
