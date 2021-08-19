@@ -3,17 +3,32 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="image/x-icon" rel="shortcut icon" href="/assets/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="/assets/style.css">
+    <script type="text/javascript" src="/assets/index.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
     <title>{{ .title }}</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico">
 </head>
 
 <body>
+    <main>
+        <header>
+            <h1><img src="/assets/peephole.png" /> {{ .title }}</h1>
+        </header>
+        <ul class="event-list">
+            <li>
+                <div class="event">
+                    <span class="minion">minion-id</span>
+                    <span class="function">highstate</span>
+                    <a class="show" onclick="dialog()">show</a>
+                </div>
+            </li>
+        </ul>
+    </main>
 </body>
-
-<script>
-    (new EventSource("/stream")).addEventListener("event", function (e) {
-        document.body.innerHTML += e.data + "</br>";
-    });
-</script>
 
 </html>

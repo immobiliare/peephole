@@ -1,0 +1,77 @@
+html {
+	--primary: #D5D5D5;
+    --darker: #A6A4A4;
+	--primary-bg: #282828;
+	--darker-bg: #202020;
+
+    color: var(--primary);
+    background-color: var(--primary-bg);
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    max-width: 750px;
+    margin: auto;
+}
+
+header {
+    margin: 50px auto;
+    position: relative;
+}
+
+header h1 {
+    text-indent: 60px;
+    text-shadow: 1px 2px 0 var(--darker-bg);
+}
+
+header img {
+    position: absolute;
+    left: 0;
+    width: 40px;
+}
+
+ul.event-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul.event-list>li {
+    background-color: var(--darker-bg);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+ul.event-list>li>div.event {
+    position: relative;
+    text-shadow: 1px 1px 0 var(--darker-bg);
+    padding: 5px;
+}
+
+ul.event-list>li>div.event>span {
+    display: block;
+}
+
+ul.event-list>li>div.event>span.minion, ul.event-list>li>div.event>a.show {
+    color: var(--darker);
+}
+
+ul.event-list>li>div.event>span.function {
+    padding-top: 10px;
+    font-size: 1.75em;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+ul.event-list>li>div.event>a.show {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    text-transform: uppercase;
+    padding: 10px;
+}
+
+ul.event-list>li>div.event>a.show:hover {
+    cursor: pointer;
+    background-color: var(--primary-bg);
+}
