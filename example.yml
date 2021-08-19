@@ -3,3 +3,7 @@ spy:
     user: user
     pass: pass
     client: pam
+kiosk:
+  bind: :8080
+  basic_auth:
+    user: password

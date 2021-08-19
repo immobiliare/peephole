@@ -18,6 +18,8 @@ const (
 type Event struct {
 	Master    string
 	Minion    string
+	Tag       string
+	Jid       string
 	RawData   string
 	Function  int
 	Timestamp time.Time
@@ -29,7 +31,7 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 		return nil, fmt.Errorf("data structure is not a valid JSON")
 	}
 	var (
-		e = Event{Master: endpoint, RawData: data}
+		e = Event{Master: endpoint, Tag: tag, RawData: data}
 		j = gjson.Parse(data)
 	)
 
@@ -48,6 +50,7 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
 	e.Function = fnHighstate
 	e.Minion = j.Get("id").String()
+	e.Jid = j.Get("jid").String()
 	e.Success = j.Get("retcode").Int() == 0
 	if d, err := time.Parse(timestampLayout, j.Get("_stamp").String()); err == nil {
 		e.Timestamp = d
@@ -58,6 +61,7 @@ func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
 func parseSls(e *Event, j *gjson.Result) (*Event, error) {
 	e.Function = fnSls
 	e.Minion = j.Get("id").String()
+	e.Jid = j.Get("jid").String()
 	e.Success = j.Get("success").Bool()
 	if d, err := time.Parse(timestampLayout, j.Get("_stamp").String()); err == nil {
 		e.Timestamp = d
@@ -68,6 +72,7 @@ func parseSls(e *Event, j *gjson.Result) (*Event, error) {
 func parseOrchestrate(e *Event, j *gjson.Result) (*Event, error) {
 	e.Function = fnOrchestrate
 	e.Minion = j.Get("fun_args.0.pillar.event_data.id").String()
+	e.Jid = j.Get("jid").String()
 	e.Success = j.Get("success").Bool()
 	if d, err := time.Parse(timestampLayout, j.Get("_stamp").String()); err == nil {
 		e.Timestamp = d

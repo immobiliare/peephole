@@ -8,7 +8,12 @@
 </head>
 
 <body>
-    Hello!
 </body>
+
+<script>
+    (new EventSource("/stream")).addEventListener("event", function (e) {
+        document.body.innerHTML += e.data + "</br>";
+    });
+</script>
 
 </html>

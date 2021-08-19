@@ -11,6 +11,7 @@ import (
 
 type Spy struct {
 	endpoints map[string]string
+	EventChan chan *_mold.Event
 }
 
 func init() {
@@ -20,7 +21,10 @@ func init() {
 }
 
 func Init(endpoints []*_config.Spy) (*Spy, error) {
-	var spy = &Spy{make(map[string]string)}
+	var spy = &Spy{
+		make(map[string]string),
+		make(chan *_mold.Event),
+	}
 	for _, e := range endpoints {
 		if r, err := _salt.Login(e.API, e.User, e.Pass, e.Client); err != nil {
 			return nil, err
@@ -58,16 +62,19 @@ func (s *Spy) Watch() error {
 
 		o, err := _mold.Parse(e.Endpoint, e.Tag, e.Data)
 		if err != nil {
-			logrus.WithError(err).Errorln("Unable to parse event")
+			logrus.WithError(err).Warnln("Unable to parse event")
+			continue
 		}
 
 		if err := _mold.Persist(o); err != nil {
-			logrus.WithError(err).Errorln("Unable to save events")
+			logrus.WithError(err).Errorln("Unable to persist event")
+			continue
 		}
 
 		logrus.WithFields(logrus.Fields{
-			"Endpoint": e.Endpoint,
-			"Tag":      e.Tag,
-		}).Debugln("Event persisted")
+			"Master": o.Master,
+			"Tag":    o.Tag,
+		}).Println("Event persisted, gonna fire it through channel")
+		s.EventChan <- o
 	}
 }
