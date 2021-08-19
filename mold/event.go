@@ -9,10 +9,18 @@ import (
 
 const (
 	fnHighstate = iota
-	fnSls
+	fnState
 	fnOrchestrate
 	_
 	timestampLayout = "2006-01-02T15:04:05.000000"
+)
+
+var (
+	FnType = map[int]string{
+		fnHighstate:   "highstate",
+		fnState:       "state",
+		fnOrchestrate: "orchestrate",
+	}
 )
 
 type Event struct {
@@ -39,7 +47,7 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 	if fun == "state.highstate" {
 		return parseHighstate(&e, &j)
 	} else if fun == "state.sls" || fun == "state.apply" {
-		return parseSls(&e, &j)
+		return parseState(&e, &j)
 	} else if fun == "runner.state.orchestrate" {
 		return parseOrchestrate(&e, &j)
 	}
@@ -58,8 +66,8 @@ func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
 	return e, nil
 }
 
-func parseSls(e *Event, j *gjson.Result) (*Event, error) {
-	e.Function = fnSls
+func parseState(e *Event, j *gjson.Result) (*Event, error) {
+	e.Function = fnState
 	e.Minion = j.Get("id").String()
 	e.Jid = j.Get("jid").String()
 	e.Success = j.Get("success").Bool()
