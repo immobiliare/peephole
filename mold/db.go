@@ -1,6 +1,9 @@
 package mold
 
-import "sort"
+import (
+	"fmt"
+	"sort"
+)
 
 var (
 	history []*Event = []*Event{}
@@ -9,6 +12,15 @@ var (
 func Persist(e *Event) error {
 	history = append(history, e)
 	return nil
+}
+
+func Get(jid string) (*Event, error) {
+	for _, e := range history {
+		if e.Jid == jid {
+			return e, nil
+		}
+	}
+	return nil, fmt.Errorf("event with jid %s not found", jid)
 }
 
 func Select(limit int) ([]Event, error) {
