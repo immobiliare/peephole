@@ -43,6 +43,13 @@ func Init(eventChan chan *_mold.Event, config *_config.Kiosk) *Kiosk {
 			c.JSON(http.StatusOK, e)
 		}
 	})
+	_priv.GET("/events/:jid", func(c *gin.Context) {
+		if e, err := _mold.Get(c.Param("jid")); err != nil {
+			c.Status(http.StatusNotFound)
+		} else {
+			c.JSON(http.StatusOK, e)
+		}
+	})
 	k.router.GET("/stream", func(c *gin.Context) {
 		c.Writer.Header().Set("Content-Type", "text/event-stream")
 		c.Writer.Header().Set("Cache-Control", "no-cache")
