@@ -7,12 +7,50 @@ html {
     color: var(--primary);
     background-color: var(--primary-bg);
     font-family: 'Roboto', sans-serif;
-    padding: 20px;
 }
 
 body {
+    margin: 0;
+    overflow-x: clip;
+}
+
+div.event-dialog {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: calc(100vw - 40px);
+    height: calc(100vh - 40px);
+    background-color: var(--darker-bg);
+    z-index: 10;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 10px;
+}
+
+div.event-dialog>a.dismiss {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    text-transform: uppercase;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: var(--primary-bg);
+}
+
+div.event-dialog>a.dismiss:hover {
+    cursor: pointer;
+    background-color: var(--darker-bg);
+}
+
+div.event-dialog>pre {
+    padding: 20px;
+    font-family: 'Monospace';
+}
+
+main {
     max-width: 750px;
     margin: auto;
+    padding: 20px;
 }
 
 header {
