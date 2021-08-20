@@ -18,9 +18,10 @@ type Kiosk struct {
 }
 
 func init() {
-	gin.SetMode(gin.ReleaseMode)
 	if os.Getenv("DEBUG") != "" {
 		logrus.SetLevel(logrus.DebugLevel)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
 	}
 }
 
@@ -30,27 +31,28 @@ func Init(eventChan chan *_mold.Event, config *_config.Kiosk) *Kiosk {
 	k.router = gin.Default()
 	k.eventChan = eventChan
 	k.router.LoadHTMLGlob("kiosk/assets/templates/*html")
-	k.router.Static("/assets", "kiosk/assets/static")
 	k.router.GET("/ping", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "pong"}) })
 
 	_priv := k.router.Group("/", gin.BasicAuth(gin.Accounts(config.BasicAuth)))
+	_priv.Static("/assets", "kiosk/assets/static")
 	_priv.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", gin.H{"title": "Peephole"}) })
 	_priv.GET("/events", func(c *gin.Context) {
-		// TODO: do select without RawData here
 		if e, err := _mold.Select(15); err != nil {
 			c.Error(err)
 		} else {
 			c.JSON(http.StatusOK, e)
 		}
 	})
-	_priv.GET("/stream", func(c *gin.Context) {
+	k.router.GET("/stream", func(c *gin.Context) {
 		c.Writer.Header().Set("Content-Type", "text/event-stream")
 		c.Writer.Header().Set("Cache-Control", "no-cache")
 		c.Writer.Header().Set("Connection", "keep-alive")
 		c.Writer.Header().Set("Transfer-Encoding", "chunked")
 		c.Next()
 		c.Stream(func(w io.Writer) bool {
-			if msg, ok := <-k.eventChan; ok {
+			if e, ok := <-k.eventChan; ok {
+				msg := e.Outline()
+				logrus.WithField("jid", msg.Jid).Debugln("Sending SSE message")
 				c.SSEvent("event", msg)
 				return true
 			}
