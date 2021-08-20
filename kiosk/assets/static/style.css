@@ -74,7 +74,7 @@ ul.event-list>li>div.event>span.minion, ul.event-list>li>div.event>a.show {
 
 ul.event-list>li>div.event>span.function {
     padding-top: 10px;
-    font-size: 1.75em;
+    font-size: 1.3em;
     text-transform: uppercase;
     font-weight: bold;
 }
@@ -86,7 +86,7 @@ ul.event-list>li>div.event>a.show {
     right: 15px;
     text-transform: uppercase;
     padding: 15px;
-    border-top-left-radius: 5px;
+    border-radius: 5px;
 }
 
 ul.event-list>li>div.event>a.show:hover {
