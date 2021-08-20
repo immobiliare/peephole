@@ -11,13 +11,16 @@ func Persist(e *Event) error {
 	return nil
 }
 
-func Select(chunk int) ([]*Event, error) {
-	sort.Slice(history, func(i, j int) bool {
-		return history[i].Timestamp.After(history[j].Timestamp)
-	})
-
-	if chunk != -1 && chunk < len(history) {
-		return history[:chunk], nil
+func Select(limit int) ([]Event, error) {
+	chunk := []Event{}
+	for i := 0; i < limit; i++ {
+		if i == len(history) {
+			break
+		}
+		chunk = append(chunk, history[i].Outline())
 	}
-	return history, nil
+	sort.Slice(chunk, func(i, j int) bool {
+		return chunk[i].Timestamp.Before(chunk[j].Timestamp)
+	})
+	return chunk, nil
 }
