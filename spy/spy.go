@@ -26,12 +26,13 @@ func Init(endpoints []*_config.Spy) (*Spy, error) {
 		make(chan *_mold.Event),
 	}
 	for _, e := range endpoints {
-		if r, err := _salt.Login(e.API, e.User, e.Pass, e.Client); err != nil {
+		r, err := _salt.Login(e.API, e.User, e.Pass, e.Client)
+		if err != nil {
 			return nil, err
-		} else {
-			spy.endpoints[e.API] = r.Return[0].Token
-			logrus.WithField("token", r.Return[0].Token).Debugln("Token received")
 		}
+
+		spy.endpoints[e.API] = r.Return[0].Token
+		logrus.WithField("token", r.Return[0].Token).Debugln("Token received")
 	}
 	return spy, nil
 }

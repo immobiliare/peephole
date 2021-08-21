@@ -1,133 +1,133 @@
 html {
-	--primary: #D5D5D5;
-    --darker: #A6A4A4;
-	--primary-bg: #282828;
-	--darker-bg: #202020;
+  --primary: #d5d5d5;
+  --darker: #a6a4a4;
+  --primary-bg: #282828;
+  --darker-bg: #202020;
 
-    color: var(--primary);
-    background-color: var(--primary-bg);
-    font-family: 'Roboto', sans-serif;
+  color: var(--primary);
+  background-color: var(--primary-bg);
+  font-family: 'Arial', sans-serif;
 }
 
 body {
-    margin: 0;
-    overflow-x: clip;
+  margin: 0;
+  overflow-x: clip;
 }
 
 div.event-dialog {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: calc(100vw - 40px);
-    height: calc(100vh - 40px);
-    background-color: var(--darker-bg);
-    z-index: 10;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border-radius: 10px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: calc(100vw - 40px);
+  height: calc(100vh - 40px);
+  background-color: var(--darker-bg);
+  z-index: 10;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 10px;
 }
 
-div.event-dialog>a.dismiss {
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    text-transform: uppercase;
-    padding: 15px;
-    border-radius: 5px;
-    background-color: var(--primary-bg);
+div.event-dialog > a.dismiss {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  text-transform: uppercase;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: var(--primary-bg);
 }
 
-div.event-dialog>a.dismiss:hover {
-    cursor: pointer;
-    background-color: var(--darker-bg);
+div.event-dialog > a.dismiss:hover {
+  cursor: pointer;
+  background-color: var(--darker-bg);
 }
 
-div.event-dialog>pre {
-    padding: 20px;
-    font-family: 'Monospace';
+div.event-dialog > pre {
+  padding: 20px;
+  font-family: 'Monospace', monospace;
 }
 
 main {
-    max-width: 750px;
-    margin: auto;
-    padding: 20px;
+  max-width: 750px;
+  margin: auto;
+  padding: 20px;
 }
 
 header {
-    margin: 50px auto;
-    position: relative;
+  margin: 50px auto;
+  position: relative;
 }
 
 header h1 {
-    text-indent: 60px;
-    text-shadow: 1px 2px 0 var(--darker-bg);
+  text-indent: 60px;
+  text-shadow: 1px 2px 0 var(--darker-bg);
 }
 
 header img {
-    position: absolute;
-    left: 0;
-    width: 40px;
+  position: absolute;
+  left: 0;
+  width: 40px;
 }
 
 p.loading {
-    text-align: center;
-    font-size: 1.5em;
-    color: var(--darker);
+  text-align: center;
+  font-size: 1.5em;
+  color: var(--darker);
 }
 
 ul.event-list {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }
 
-ul.event-list>li {
-    background-color: var(--darker-bg);
-    padding: 15px;
-    margin-top: 3px;
+ul.event-list > li {
+  background-color: var(--darker-bg);
+  padding: 15px;
+  margin-top: 3px;
 }
 
-ul.event-list>li:first-child {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+ul.event-list > li:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
-ul.event-list>li:last-child {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+ul.event-list > li:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
-ul.event-list>li>div.event {
-    position: relative;
-    text-shadow: 1px 1px 0 var(--darker-bg);
-    padding: 5px;
+ul.event-list > li > div.event {
+  position: relative;
+  text-shadow: 1px 1px 0 var(--darker-bg);
+  padding: 5px;
 }
 
-ul.event-list>li>div.event>span {
-    display: block;
+ul.event-list > li > div.event > span {
+  display: block;
 }
 
-ul.event-list>li>div.event>span.minion, ul.event-list>li>div.event>a.show {
-    color: var(--darker);
+ul.event-list > li > div.event > span.minion,
+ul.event-list > li > div.event > a.show {
+  color: var(--darker);
 }
 
-ul.event-list>li>div.event>span.function {
-    padding-top: 10px;
-    font-size: 1.3em;
-    text-transform: uppercase;
-    font-weight: bold;
+ul.event-list > li > div.event > span.function {
+  padding-top: 10px;
+  font-size: 1.3em;
+  text-transform: uppercase;
 }
 
-ul.event-list>li>div.event>a.show {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 15px;
-    text-transform: uppercase;
-    padding: 15px;
-    border-radius: 5px;
+ul.event-list > li > div.event > a.show {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 15px;
+  text-transform: uppercase;
+  padding: 15px;
+  border-radius: 5px;
 }
 
-ul.event-list>li>div.event>a.show:hover {
-    cursor: pointer;
-    background-color: var(--primary-bg);
+ul.event-list > li > div.event > a.show:hover {
+  cursor: pointer;
+  background-color: var(--primary-bg);
 }

@@ -91,15 +91,12 @@ func Events(endpoint, token string, peephole chan *EventsResponse) error {
 }
 
 func unmarshal(block []string) (*EventsResponse, error) {
-	if len(block) == 0 {
-		return nil, fmt.Errorf("empty block")
-	} else if _util.HasAnyPrefix(block, "retry:") {
+	if _util.HasAnyPrefix(block, "retry:") {
 		return unmarshalRetry(block)
 	} else if _util.HasAnyPrefix(block, "tag:") && _util.HasAnyPrefix(block, "data:") {
 		return unmarshalData(block)
-	} else {
-		return &EventsResponse{Type: eventUnknown}, nil
 	}
+	return &EventsResponse{Type: eventUnknown}, nil
 }
 
 func unmarshalRetry(block []string) (*EventsResponse, error) {
