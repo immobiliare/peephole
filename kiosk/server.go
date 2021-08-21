@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	_config "gitlab.rete.farm/dpucci/peephole/config"
-	_mold "gitlab.rete.farm/dpucci/peephole/mold"
+	_config "github.com/streambinder/peephole/config"
+	_mold "github.com/streambinder/peephole/mold"
 )
 
 type Kiosk struct {

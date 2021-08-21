@@ -4,9 +4,9 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	_config "gitlab.rete.farm/dpucci/peephole/config"
-	_mold "gitlab.rete.farm/dpucci/peephole/mold"
-	_salt "gitlab.rete.farm/dpucci/peephole/salt-api"
+	_config "github.com/streambinder/peephole/config"
+	_mold "github.com/streambinder/peephole/mold"
+	_salt "github.com/streambinder/peephole/salt-api"
 )
 
 type Spy struct {

@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
-	_util "gitlab.rete.farm/dpucci/peephole/util"
+	_util "github.com/streambinder/peephole/util"
 )
 
 const (

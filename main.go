@@ -4,9 +4,9 @@ import (
 	"flag"
 
 	"github.com/sirupsen/logrus"
-	_config "gitlab.rete.farm/dpucci/peephole/config"
-	_kiosk "gitlab.rete.farm/dpucci/peephole/kiosk"
-	_spy "gitlab.rete.farm/dpucci/peephole/spy"
+	_config "github.com/streambinder/peephole/config"
+	_kiosk "github.com/streambinder/peephole/kiosk"
+	_spy "github.com/streambinder/peephole/spy"
 )
 
 var (
