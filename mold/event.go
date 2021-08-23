@@ -46,7 +46,7 @@ func (e *Event) matchReg(r *regexp.Regexp) bool {
 }
 
 func (e *Event) matchStr(s string) bool {
-	return strings.Contains(strings.Join(e.matchGroup()[:], "::"), s)
+	return strings.Contains(strings.Join(e.matchGroup(), "::"), s)
 }
 
 func Parse(endpoint, tag, data string) (*Event, error) {
