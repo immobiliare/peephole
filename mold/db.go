@@ -26,6 +26,9 @@ func Init(config *_config.Mold) (*Mold, error) {
 			logrus.WithError(err).Errorln("Unable to enforce db retention")
 		}
 	}()
+	go func() {
+		logrus.WithField("count", mold.count()).Println("DB succesfully initialized")
+	}()
 	return mold, nil
 }
 
@@ -95,4 +98,18 @@ func (db *Mold) Select(filter string, limit int) ([]Event, error) {
 func (db *Mold) housekeep() error {
 	// TODO: implement
 	return nil
+}
+
+func (db *Mold) count() int {
+	var (
+		iter  = db.NewIter(nil)
+		count = 0
+	)
+	defer iter.Close()
+
+	for iter.First(); iter.Valid(); iter.Next() {
+		count++
+	}
+
+	return count
 }

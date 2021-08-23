@@ -14,39 +14,6 @@ body {
   overflow-x: clip;
 }
 
-div.event-dialog {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: calc(100vw - 40px);
-  height: calc(100vh - 40px);
-  background-color: var(--darker-bg);
-  z-index: 10;
-  overflow-y: auto;
-  overflow-x: hidden;
-  border-radius: 10px;
-}
-
-div.event-dialog > a.dismiss {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  text-transform: uppercase;
-  padding: 15px;
-  border-radius: 5px;
-  background-color: var(--primary-bg);
-}
-
-div.event-dialog > a.dismiss:hover {
-  cursor: pointer;
-  background-color: var(--darker-bg);
-}
-
-div.event-dialog > pre {
-  padding: 20px;
-  font-family: 'Monospace', monospace;
-}
-
 main {
   max-width: 750px;
   margin: auto;
@@ -130,4 +97,72 @@ ul.event-list > li > div.event > a.show {
 ul.event-list > li > div.event > a.show:hover {
   cursor: pointer;
   background-color: var(--primary-bg);
+}
+
+div.event-dialog {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: calc(100vw - 40px);
+  height: calc(100vh - 40px);
+  background-color: var(--darker-bg);
+  z-index: 10;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 10px;
+}
+
+div.event-dialog > a.dismiss {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  text-transform: uppercase;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: var(--primary-bg);
+}
+
+div.event-dialog > a.dismiss:hover {
+  cursor: pointer;
+  background-color: var(--darker-bg);
+}
+
+div.event-dialog > pre {
+  padding: 20px;
+  font-family: 'Monospace', monospace;
+}
+
+div.event-dialog > pre > span.key {
+  color: #ddd;
+}
+
+div.event-dialog > pre > span.string {
+  color: rgb(46, 204, 113);
+}
+
+div.event-dialog > pre > span.number {
+  color: lightblue;
+}
+
+div.event-dialog > pre > span.boolean {
+  color: yellow;
+}
+
+div.event-dialog > pre > span.date {
+  color: brown;
+}
+
+div.event-dialog > pre > span.null {
+  color: gray;
+}
+
+div.event-dialog > pre > span.version {
+  color: blue;
+}
+
+div.event-dialog > pre > span.container {
+  color: gray;
+  white-space: pre;
+  user-select: text;
+  -webkit-user-select: text;
 }
