@@ -46,7 +46,7 @@ func Init(db *_mold.Mold, eventChan chan *_mold.Event, config *_config.Kiosk) *K
 	})
 	_priv.GET("/events/:jid", func(c *gin.Context) {
 		if e, err := db.Read(c.Param("jid")); err != nil {
-			logrus.WithError(err).Errorln("Unable to look for entry with jid %s", c.Param("jid"))
+			logrus.WithError(err).WithField("jid", c.Param("jid")).Errorln("Unable to query event")
 			c.Status(http.StatusNotFound)
 		} else {
 			c.JSON(http.StatusOK, e)
