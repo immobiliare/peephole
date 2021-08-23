@@ -12,6 +12,7 @@ import (
 type Spy struct {
 	endpoints map[string]string
 	EventChan chan *_mold.Event
+	db        *_mold.Mold
 }
 
 func init() {
@@ -20,10 +21,11 @@ func init() {
 	}
 }
 
-func Init(endpoints []*_config.Spy) (*Spy, error) {
+func Init(db *_mold.Mold, endpoints []*_config.Spy) (*Spy, error) {
 	var spy = &Spy{
 		make(map[string]string),
 		make(chan *_mold.Event),
+		db,
 	}
 	for _, e := range endpoints {
 		r, err := _salt.Login(e.API, e.User, e.Pass, e.Client)
@@ -67,7 +69,7 @@ func (s *Spy) Watch() error {
 			continue
 		}
 
-		if err := _mold.Persist(o); err != nil {
+		if err := s.db.Write(o); err != nil {
 			logrus.WithError(err).Errorln("Unable to persist event")
 			continue
 		}

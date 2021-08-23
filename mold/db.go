@@ -1,38 +1,98 @@
 package mold
 
 import (
-	"fmt"
 	"sort"
+
+	"github.com/cockroachdb/pebble"
+	"github.com/sirupsen/logrus"
+	_config "github.com/streambinder/peephole/config"
+	_util "github.com/streambinder/peephole/util"
 )
 
-var (
-	history []*Event = []*Event{}
-)
+type Mold struct {
+	*pebble.DB
+	config *_config.Mold
+}
 
-func Persist(e *Event) error {
-	history = append(history, e)
+func Init(config *_config.Mold) (*Mold, error) {
+	db, err := pebble.Open(config.Spool, &pebble.Options{})
+	if err != nil {
+		return nil, err
+	}
+
+	mold := &Mold{db, config}
+	go func() {
+		if mold.housekeep(); err != nil {
+			logrus.WithError(err).Errorln("Unable to enforce db retention")
+		}
+	}()
+	return mold, nil
+}
+
+func (db *Mold) Write(e *Event) error {
+	bytes, err := _util.Marshal(e)
+	if err != nil {
+		return err
+	}
+
+	if err := db.Set([]byte(e.Jid), bytes, pebble.Sync); err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func Get(jid string) (*Event, error) {
-	for _, e := range history {
-		if e.Jid == jid {
-			return e, nil
-		}
+func (db *Mold) Read(jid string) (*Event, error) {
+	value, closer, err := db.Get([]byte(jid))
+	if err != nil {
+		return nil, err
 	}
-	return nil, fmt.Errorf("event with jid %s not found", jid)
+
+	if err := closer.Close(); err != nil {
+		return nil, err
+	}
+
+	e := new(Event)
+	if err := _util.Unmarshal(value, e); err != nil {
+		return nil, err
+	}
+
+	return e, nil
 }
 
-func Select(limit int) ([]Event, error) {
-	chunk := []Event{}
-	for i := 0; i < limit; i++ {
-		if i == len(history) {
-			break
+func (db *Mold) Select(filter string, limit int) ([]Event, error) {
+	var (
+		iter  = db.NewIter(nil)
+		batch = []Event{}
+	)
+
+	for iter.First(); iter.Valid(); iter.Next() {
+		e := Event{}
+		if err := _util.Unmarshal(iter.Value(), &e); err != nil {
+			return []Event{}, err
 		}
-		chunk = append(chunk, history[i].Outline())
+
+		if filter == "" || e.Match(filter) {
+			batch = append(batch, e)
+		}
 	}
-	sort.Slice(chunk, func(i, j int) bool {
-		return chunk[i].Timestamp.Before(chunk[j].Timestamp)
+
+	if err := iter.Close(); err != nil {
+		return []Event{}, err
+	}
+
+	sort.Slice(batch, func(i, j int) bool {
+		return batch[i].Timestamp.Before(batch[j].Timestamp)
 	})
-	return chunk, nil
+
+	if len(batch) > limit {
+		batch = batch[:limit]
+	}
+
+	return batch, nil
+}
+
+func (db *Mold) housekeep() error {
+	// TODO: implement
+	return nil
 }

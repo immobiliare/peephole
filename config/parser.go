@@ -24,5 +24,8 @@ func Parse(path string) (*Wrapper, error) {
 }
 
 func process(cfg *Wrapper) (*Wrapper, error) {
+	if cfg.Mold.Spool == "" {
+		cfg.Mold.Spool = "/var/spool/peephole"
+	}
 	return cfg, nil
 }

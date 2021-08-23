@@ -25,7 +25,7 @@ func init() {
 	}
 }
 
-func Init(eventChan chan *_mold.Event, config *_config.Kiosk) *Kiosk {
+func Init(db *_mold.Mold, eventChan chan *_mold.Event, config *_config.Kiosk) *Kiosk {
 	k := new(Kiosk)
 	k.config = config
 	k.router = gin.Default()
@@ -37,7 +37,7 @@ func Init(eventChan chan *_mold.Event, config *_config.Kiosk) *Kiosk {
 	_priv.Static("/assets", "kiosk/assets/static")
 	_priv.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", gin.H{"title": "Peephole"}) })
 	_priv.GET("/events", func(c *gin.Context) {
-		if e, err := _mold.Select(15); err != nil {
+		if e, err := db.Select("", 15); err != nil {
 			logrus.WithError(err).Warnln("unable to select events")
 			c.JSON(http.StatusInternalServerError, []_mold.Event{})
 		} else {
@@ -45,7 +45,8 @@ func Init(eventChan chan *_mold.Event, config *_config.Kiosk) *Kiosk {
 		}
 	})
 	_priv.GET("/events/:jid", func(c *gin.Context) {
-		if e, err := _mold.Get(c.Param("jid")); err != nil {
+		if e, err := db.Read(c.Param("jid")); err != nil {
+			logrus.WithError(err).Errorln("Unable to look for entry with jid %s", c.Param("jid"))
 			c.Status(http.StatusNotFound)
 		} else {
 			c.JSON(http.StatusOK, e)

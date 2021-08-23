@@ -7,3 +7,6 @@ kiosk:
   bind: :8080
   basic_auth:
     user: password
+mold:
+  spool: /var/spool/peephole
+  retention: 7d
