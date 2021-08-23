@@ -1,4 +1,4 @@
-package saltapi
+package salt
 
 import (
 	"encoding/json"

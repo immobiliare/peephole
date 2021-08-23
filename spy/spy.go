@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	_config "github.com/streambinder/peephole/config"
 	_mold "github.com/streambinder/peephole/mold"
-	_salt "github.com/streambinder/peephole/salt-api"
+	_salt "github.com/streambinder/peephole/salt"
 )
 
 type Spy struct {
