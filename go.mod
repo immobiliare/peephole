@@ -9,7 +9,6 @@ require (
 	github.com/cockroachdb/redact v1.1.3 // indirect
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/klauspost/compress v1.13.4 // indirect
