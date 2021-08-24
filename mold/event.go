@@ -81,18 +81,20 @@ func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
 }
 
 func parseState(e *Event, j *gjson.Result) (*Event, error) {
-	// TODO: add state to function (in parentheses)
-	// e.g. e.Function = "state(environment.interfaces)"
-	e.Function = "state apply"
+	e.Function = "state"
+	if j.Get("arg").IsArray() && j.Get("arg.#").Int() > 0 {
+		e.Function += fmt.Sprintf(" (%s)", stringifyArray(j.Get("arg").Array()))
+	}
 	e.Minion = j.Get("id").String()
 	e.Success = j.Get("success").Bool()
 	return parseCommon(e, j)
 }
 
 func parseOrchestrate(e *Event, j *gjson.Result) (*Event, error) {
-	// TODO: add orchestrate module to function (in parentheses)
-	// e.g. e.Function = "orchestrate(_orch.events.cloud_created)"
-	e.Function = "orchestrate"
+	e.Function = "orch"
+	if j.Get("fun_args.0.mods").String() != "" {
+		e.Function += fmt.Sprintf(" (%s)", j.Get("fun_args.0.mods").String())
+	}
 	e.Minion = j.Get("fun_args.0.pillar.event_data.id").String()
 	e.Success = j.Get("success").Bool()
 	return parseCommon(e, j)
@@ -104,4 +106,16 @@ func parseCommon(e *Event, j *gjson.Result) (*Event, error) {
 		e.Timestamp = d
 	}
 	return e, nil
+}
+
+func stringifyArray(results []gjson.Result) string {
+	var arr = []string{}
+	for _, item := range results {
+		itemValue := item.String()
+		if itemValue == "test=True" {
+			itemValue = "test"
+		}
+		arr = append(arr, itemValue)
+	}
+	return strings.Join(arr, ", ")
 }
