@@ -12,6 +12,7 @@ run:
 issues:
   exclude:
     - undeclared name
+    - has no field or method
   exclude-rules:
     - path: _test\.go
       linters:
