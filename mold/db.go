@@ -2,6 +2,7 @@ package mold
 
 import (
 	"sort"
+	"sync"
 
 	"github.com/cockroachdb/pebble"
 	"github.com/sirupsen/logrus"
@@ -12,6 +13,7 @@ import (
 type Mold struct {
 	*pebble.DB
 	config *_config.Mold
+	mutex  sync.Mutex
 }
 
 func Init(config *_config.Mold) (*Mold, error) {
@@ -20,7 +22,7 @@ func Init(config *_config.Mold) (*Mold, error) {
 		return nil, err
 	}
 
-	mold := &Mold{db, config}
+	mold := &Mold{db, config, sync.Mutex{}}
 	go func() {
 		if mold.housekeep(); err != nil {
 			logrus.WithError(err).Errorln("Unable to enforce db retention")
@@ -38,11 +40,7 @@ func (db *Mold) Write(e *Event) error {
 		return err
 	}
 
-	if err := db.Set([]byte(e.Jid), bytes, pebble.Sync); err != nil {
-		return err
-	}
-
-	return nil
+	return db.Set([]byte(e.Jid), bytes, nil)
 }
 
 func (db *Mold) Read(jid string) (*Event, error) {
@@ -93,11 +91,6 @@ func (db *Mold) Select(filter string, limit int) ([]Event, error) {
 	}
 
 	return batch, nil
-}
-
-func (db *Mold) housekeep() error {
-	// TODO: implement
-	return nil
 }
 
 func (db *Mold) count() int {

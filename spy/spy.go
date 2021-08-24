@@ -79,7 +79,7 @@ func (s *Spy) Watch() error {
 			"Minion":   o.Minion,
 			"Jid":      o.Jid,
 			"Function": o.Function,
-		}).Println("Event persisted, gonna fire it through channel")
+		}).Println("Event persisted")
 		s.EventChan <- o
 	}
 }
