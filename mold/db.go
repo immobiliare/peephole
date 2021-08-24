@@ -4,33 +4,55 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/cockroachdb/pebble"
 	"github.com/sirupsen/logrus"
 	_config "github.com/streambinder/peephole/config"
 	_util "github.com/streambinder/peephole/util"
+	"github.com/xujiajun/nutsdb"
+)
+
+/*
+ * module requirements include:
+ * - persistence
+ * - auto-expiration
+ */
+
+const (
+	bucket = "_events"
 )
 
 type Mold struct {
-	*pebble.DB
-	config *_config.Mold
-	mutex  sync.Mutex
+	*nutsdb.DB
+	config        *_config.Mold
+	opGetMutex    sync.Mutex
+	opGet         chan *Event
+	opSelectMutex sync.Mutex
+	opSelect      chan []Event
+	opCountMutex  sync.Mutex
+	opCount       chan int
 }
 
 func Init(config *_config.Mold) (*Mold, error) {
-	db, err := pebble.Open(config.Spool, &pebble.Options{})
+	opt := nutsdb.DefaultOptions
+	opt.Dir = config.Spool
+	db, err := nutsdb.Open(opt)
 	if err != nil {
 		return nil, err
 	}
 
-	mold := &Mold{db, config, sync.Mutex{}}
-	go func() {
-		if mold.housekeep(); err != nil {
-			logrus.WithError(err).Errorln("Unable to enforce db retention")
-		}
-	}()
+	mold := &Mold{
+		db,
+		config,
+		sync.Mutex{},
+		make(chan *Event),
+		sync.Mutex{},
+		make(chan []Event),
+		sync.Mutex{},
+		make(chan int),
+	}
 	go func() {
 		logrus.WithField("count", mold.count()).Println("DB succesfully initialized")
 	}()
+
 	return mold, nil
 }
 
@@ -40,48 +62,78 @@ func (db *Mold) Write(e *Event) error {
 		return err
 	}
 
-	return db.Set([]byte(e.Jid), bytes, nil)
+	return db.Update(
+		func(tx *nutsdb.Tx) error {
+			return tx.Put(bucket, []byte(e.Jid), bytes, _util.RetentionSeconds(db.config.Retention))
+		})
 }
 
 func (db *Mold) Read(jid string) (*Event, error) {
-	value, closer, err := db.Get([]byte(jid))
-	if err != nil {
-		return nil, err
-	}
+	db.opGetMutex.Lock()
+	defer db.opGetMutex.Unlock()
 
-	if err := closer.Close(); err != nil {
-		return nil, err
-	}
+	go func() {
+		if err := db.View(
+			func(tx *nutsdb.Tx) error {
+				data, err := tx.Get(bucket, []byte(jid))
+				if err != nil {
+					db.opGet <- nil
+					return err
+				}
 
-	e := new(Event)
-	if err := _util.Unmarshal(value, e); err != nil {
-		return nil, err
-	}
+				e := new(Event)
+				if err := _util.Unmarshal(data.Value, e); err != nil {
+					db.opGet <- nil
+					return err
+				}
 
-	return e, nil
+				db.opGet <- e
+				return nil
+			}); err != nil {
+			logrus.WithError(err).WithField("jid", jid).Errorln("Unable to read key")
+		}
+	}()
+
+	return <-db.opGet, nil
 }
 
 func (db *Mold) Select(filter string, limit int) ([]Event, error) {
-	var (
-		iter  = db.NewIter(nil)
-		batch = []Event{}
-	)
+	db.opSelectMutex.Lock()
+	defer db.opSelectMutex.Unlock()
 
-	for iter.First(); iter.Valid(); iter.Next() {
-		e := Event{}
-		if err := _util.Unmarshal(iter.Value(), &e); err != nil {
-			return []Event{}, err
+	go func() {
+		if err := db.View(
+			func(tx *nutsdb.Tx) error {
+				data, err := tx.GetAll(bucket)
+				if err != nil {
+					db.opSelect <- []Event{}
+					return err
+				}
+
+				batch := []Event{}
+				for _, entry := range data {
+					e := Event{}
+					if err := _util.Unmarshal(entry.Value, &e); err != nil {
+						db.opSelect <- []Event{}
+						return err
+					}
+
+					if filter == "" || e.Match(filter) {
+						batch = append(batch, e)
+					}
+				}
+
+				db.opSelect <- batch
+				return nil
+			}); err != nil {
+			logrus.WithError(err).WithFields(logrus.Fields{
+				"filter": filter,
+				"limit":  limit,
+			}).Errorln("Unable to select keys")
 		}
+	}()
 
-		if filter == "" || e.Match(filter) {
-			batch = append(batch, e)
-		}
-	}
-
-	if err := iter.Close(); err != nil {
-		return []Event{}, err
-	}
-
+	batch := <-db.opSelect
 	sort.Slice(batch, func(i, j int) bool {
 		return batch[i].Timestamp.Before(batch[j].Timestamp)
 	})
@@ -94,15 +146,24 @@ func (db *Mold) Select(filter string, limit int) ([]Event, error) {
 }
 
 func (db *Mold) count() int {
-	var (
-		iter  = db.NewIter(nil)
-		count = 0
-	)
-	defer iter.Close()
+	db.opCountMutex.Lock()
+	defer db.opCountMutex.Unlock()
 
-	for iter.First(); iter.Valid(); iter.Next() {
-		count++
-	}
+	go func() {
+		if err := db.View(
+			func(tx *nutsdb.Tx) error {
+				data, err := tx.GetAll(bucket)
+				if err != nil {
+					db.opCount <- 0
+					return err
+				}
 
-	return count
+				db.opCount <- len(data)
+				return nil
+			}); err != nil {
+			logrus.WithError(err).Errorln("Unable to count keys")
+		}
+	}()
+
+	return <-db.opCount
 }

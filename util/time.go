@@ -1,46 +1,41 @@
 package util
 
 import (
-	"fmt"
+	"strconv"
 	"strings"
-	"time"
 )
 
-func ToNow(interval string) time.Time {
-	var (
-		unit        = Unit(interval)
-		placeholder = fmt.Sprintf("-%ss", strings.Trim(interval, string(unit)))
-	)
-
-	d, err := time.ParseDuration(placeholder)
+func RetentionSeconds(interval string) uint32 {
+	unit := Unit(interval)
+	secs, err := strconv.ParseUint(strings.ReplaceAll(interval, string(unit), ""), 10, 32)
 	if err != nil {
-		return time.Date(2005, 0, 0, 0, 0, 0, 0, time.UTC)
+		return 0
 	}
 
 	switch unit {
 	case 'y': // years
-		d *= 365
-		d *= 24
-		d *= 60
-		d *= 60
+		secs *= 365
+		secs *= 24
+		secs *= 60
+		secs *= 60
 	case 'M': // months
-		d *= 31
-		d *= 24
-		d *= 60
-		d *= 60
+		secs *= 31
+		secs *= 24
+		secs *= 60
+		secs *= 60
 	case 'd': // days
-		d *= 24
-		d *= 60
-		d *= 60
+		secs *= 24
+		secs *= 60
+		secs *= 60
 	case 'h': // hours
-		d *= 60
-		d *= 60
+		secs *= 60
+		secs *= 60
 	case 'm': // minutes
-		d *= 60
+		secs *= 60
 	default: // seconds
 	}
 
-	return time.Now().Add(d)
+	return uint32(secs)
 }
 
 func Unit(interval string) rune {
