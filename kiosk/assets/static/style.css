@@ -106,63 +106,6 @@ p.loading {
   color: var(--darker);
 }
 
-ul.event-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-ul.event-list > li {
-  background-color: var(--darker-bg);
-  padding: 15px;
-  margin-top: 3px;
-}
-
-ul.event-list > li:first-child {
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-ul.event-list > li:last-child {
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-ul.event-list > li > div.event {
-  position: relative;
-  text-shadow: 1px 1px 0 var(--darker-bg);
-  padding: 5px;
-}
-
-ul.event-list > li > div.event > span {
-  display: block;
-}
-
-ul.event-list > li > div.event > span.minion,
-ul.event-list > li > div.event > a.show {
-  color: var(--darker);
-}
-
-ul.event-list > li > div.event > span.function {
-  padding-top: 10px;
-  font-size: 1.3em;
-  text-transform: uppercase;
-}
-
-ul.event-list > li > div.event > a.show {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 15px;
-  text-transform: uppercase;
-  padding: 15px;
-  border-radius: 5px;
-}
-
-ul.event-list > li > div.event > a.show:hover {
-  cursor: pointer;
-  background-color: var(--primary-bg);
-}
-
 div.event-dialog {
   position: absolute;
   top: 20px;
@@ -229,6 +172,72 @@ div.event-dialog > pre > span.container {
   white-space: pre;
   user-select: text;
   -webkit-user-select: text;
+}
+
+ul.event-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul.event-list > li {
+  background-color: var(--darker-bg);
+  padding: 15px;
+  margin-top: 3px;
+}
+
+ul.event-list > li:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+ul.event-list > li:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+ul.event-list > li > div.event {
+  position: relative;
+  text-shadow: 1px 1px 0 var(--darker-bg);
+  padding: 5px;
+}
+
+ul.event-list > li > div.event > span {
+  display: block;
+}
+
+ul.event-list > li > div.event > span.caption > i {
+  color: var(--primary-bg);
+}
+
+ul.event-list > li > div.event > span.caption > pre {
+  display: inline;
+  font-size: 1.2em;
+}
+
+ul.event-list > li > div.event > span.caption,
+ul.event-list > li > div.event > a.show {
+  color: var(--darker);
+}
+
+ul.event-list > li > div.event > span.function {
+  padding-top: 10px;
+  font-size: 1.3em;
+  text-transform: uppercase;
+}
+
+ul.event-list > li > div.event > a.show {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 15px;
+  text-transform: uppercase;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+ul.event-list > li > div.event > a.show:hover {
+  cursor: pointer;
+  background-color: var(--primary-bg);
 }
 
 .gone {

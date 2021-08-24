@@ -73,11 +73,14 @@ const setLoader = function (value) {
 
 const addEvent = function (e) {
   setLoader(null)
+  e.Timestamp = new Date(e.Timestamp)
   const events = document.getElementsByTagName('ul')[0]
+  const caption = new Date(e.Timestamp).toLocaleString().replace(',', ' at ') +
+    ' <i>—</i> <pre>' + e.Minion + '</pre>'
   events.innerHTML = `
     <li>
       <div class="event">
-          <span class="minion">${e.Minion}</span>
+          <span class="caption">${caption}</span>
           <span class="function">${e.Function}</span>
           <a class="show" onclick="dialog('${e.Jid}')">show</a>
       </div>
