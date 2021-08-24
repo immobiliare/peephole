@@ -98,11 +98,8 @@ window.onload = async function () {
       }
     })
   es = new EventSource('/stream')
-  es.onopen = function () {
-    console.log('stream opened')
-  }
   es.onerror = function () {
-    console.log('stream closed')
+    document.querySelector('span.liveness').classList.toggle('dead')
   }
   es.addEventListener('event', function (e) {
     addEvent(JSON.parse(e.data))

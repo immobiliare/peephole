@@ -3,6 +3,8 @@ html {
   --darker: #a6a4a4;
   --primary-bg: #282828;
   --darker-bg: #202020;
+  --alert: #ff6969;
+  --alert-darker: #963d3d;
 
   color: var(--primary);
   background-color: var(--primary-bg);
@@ -34,6 +36,30 @@ header img {
   position: absolute;
   left: 0;
   width: 40px;
+}
+
+header span.liveness {
+  text-transform: uppercase;
+  color: var(--alert);
+  text-shadow: 1px 2px 0 var(--darker-bg);
+  animation: blinker 3s linear infinite;
+  float: right;
+  display: list-item;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25em;
+  padding: 10px 15px;
+  list-style-position: inside;
+  border: 1px solid var(--alert-darker);
+  border-radius: 30px;
+}
+
+header span.liveness.dead {
+  color: var(--darker);
+  border: 1px solid var(--darker);
+  animation: none;
 }
 
 p.loading {
@@ -165,4 +191,10 @@ div.event-dialog > pre > span.container {
   white-space: pre;
   user-select: text;
   -webkit-user-select: text;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
 }
