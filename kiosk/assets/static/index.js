@@ -71,19 +71,29 @@ const setLoader = function (value) {
   }
 }
 
+const eventCaption = function (e) {
+  return `${new Date(e.Timestamp).toLocaleString().replace(',', ' at ')} <i>—</i> <pre>${e.Minion}</pre>`
+}
+
+const eventFunction = function (e) {
+  const fnParts = e.Function.split(' (')
+  if (fnParts.length === 1) {
+    return e.Function
+  }
+
+  return `${fnParts[0]} <pre>(${fnParts[1]}</pre>`
+}
+
 const addEvent = function (e) {
   setLoader(null)
-  e.Timestamp = new Date(e.Timestamp)
   const events = document.getElementsByTagName('ul')[0]
-  const caption = new Date(e.Timestamp).toLocaleString().replace(',', ' at ') +
-    ' <i>—</i> <pre>' + e.Minion + '</pre>'
   events.innerHTML = `
     <li>
-      <div class="event">
-          <span class="caption">${caption}</span>
-          <span class="function">${e.Function}</span>
-          <a class="show" onclick="dialog('${e.Jid}')">show</a>
-      </div>
+    <div class="event">
+      <span class="caption">${eventCaption(e)}</span>
+      <span class="function">${eventFunction(e)}</span>
+      <a class="show" onclick="dialog('${e.Jid}')">show</a>
+    </div>
     </li>` + events.innerHTML
 
   if (events.children.length > 15) {

@@ -209,8 +209,17 @@ ul.event-list > li > div.event > span.caption > i {
   color: var(--primary-bg);
 }
 
+ul.event-list > li > div.event > span.function > pre {
+  color: var(--darker);
+  text-transform: lowercase;
+}
+
+ul.event-list > li > div.event > span.function > pre,
 ul.event-list > li > div.event > span.caption > pre {
   display: inline;
+}
+
+ul.event-list > li > div.event > span.caption > pre {
   font-size: 1.2em;
 }
 
