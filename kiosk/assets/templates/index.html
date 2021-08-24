@@ -19,16 +19,13 @@
             <span class="liveness">live</span>
         </header>
 
+        <div class="search">
+            <input onkeyup="search()" placeholder="type to search...">
+            <button onclick="searchWipe()"></button>
+        </div>
+
         <p class="loading">...</p>
-        <ul class="event-list">
-            <!-- <li>
-                <div class="event">
-                    <span class="minion">minion-id</span>
-                    <span class="function">highstate</span>
-                    <a class="show" onclick="dialog(123456789)">show</a>
-                </div>
-            </li> -->
-        </ul>
+        <ul class="event-list"></ul>
     </main>
 
     <script type="text/javascript" src="/assets/index.js" defer></script>

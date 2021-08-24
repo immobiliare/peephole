@@ -36,7 +36,7 @@ func Init(db *_mold.Mold, eventChan chan *_mold.Event, config *Config) *Kiosk {
 	_priv.Static("/assets", "kiosk/assets/static")
 	_priv.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", gin.H{"title": "Peephole"}) })
 	_priv.GET("/events", func(c *gin.Context) {
-		if e, err := db.Select("", 15); err != nil {
+		if e, err := db.Select(c.Query("q"), 15); err != nil {
 			logrus.WithError(err).Warnln("unable to select events")
 			c.JSON(http.StatusInternalServerError, []_mold.Event{})
 		} else {

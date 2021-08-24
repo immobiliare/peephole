@@ -62,30 +62,35 @@ const dismiss = function () {
 }
 
 const setLoader = function (value) {
+  const loader = document.querySelector('.loading')
   if (value == null) {
-    const sheet = window.document.styleSheets[0]
-    sheet.insertRule('.loading { display: none }', sheet.cssRules.length)
+    loader.classList.add('gone')
   } else {
-    document.getElementsByClassName('loading')[0].innerHTML = value
+    loader.classList.remove('gone')
+    loader.innerHTML = value
   }
 }
 
 const addEvent = function (e) {
   setLoader(null)
-  document.getElementsByClassName('event-list')[0].innerHTML = `
+  const events = document.querySelector('.event-list')
+  events.innerHTML = `
     <li>
       <div class="event">
           <span class="minion">${e.Minion}</span>
           <span class="function">${e.Function}</span>
           <a class="show" onclick="dialog('${e.Jid}')">show</a>
       </div>
-    </li>` + document.getElementsByClassName('event-list')[0].innerHTML
+    </li>` + events.innerHTML
 }
 
-let es = null
+const fetchEvents = function (filter) {
+  let path = '/events'
+  if (filter !== null && filter !== '') {
+    path += '?q=' + filter
+  }
 
-window.onload = async function () {
-  fetch('/events')
+  fetch(path)
     .then((response) => {
       return response.json()
     }).then((json) => {
@@ -97,6 +102,28 @@ window.onload = async function () {
         setLoader('no result found')
       }
     })
+}
+
+const searchWipe = function () {
+  document.querySelector('div.search>input').value = ''
+  search()
+}
+
+const search = function () {
+  const filter = document.querySelector('div.search>input').value
+  if (filter.length < 3 && filter.length > 0) {
+    return
+  }
+
+  document.querySelector('.event-list').innerHTML = ''
+  setLoader('...')
+  fetchEvents(filter)
+}
+
+let es = null
+
+window.onload = async function () {
+  fetchEvents(null)
   es = new EventSource('/stream')
   es.onerror = function () {
     document.querySelector('span.liveness').classList.toggle('dead')
@@ -119,9 +146,10 @@ document.onkeydown = async function (e) {
       break
     case 191:
       // placeholder to make a call
-      // to dialog function
+      // to dialog/searchWipe function
       // (for linting purposes)
       dialog(null)
+      searchWipe()
       break
     default:
       break
