@@ -96,7 +96,7 @@ func (db *Mold) Read(jid string) (*Event, error) {
 	return <-db.opGet, nil
 }
 
-func (db *Mold) Select(filter string, limit int) ([]Event, error) {
+func (db *Mold) Select(filter string, page, limit int) ([]Event, error) {
 	db.opSelectMutex.Lock()
 	defer db.opSelectMutex.Unlock()
 
@@ -118,7 +118,7 @@ func (db *Mold) Select(filter string, limit int) ([]Event, error) {
 					}
 
 					if filter == "" || e.Match(filter) {
-						batch = append(batch, e)
+						batch = append(batch, e.Outline())
 					}
 				}
 
@@ -133,10 +133,15 @@ func (db *Mold) Select(filter string, limit int) ([]Event, error) {
 	}()
 
 	batch := <-db.opSelect
+	if len(batch) < limit*page {
+		return []Event{}, nil
+	}
+
 	sort.Slice(batch, func(i, j int) bool {
 		return batch[i].Timestamp.Before(batch[j].Timestamp)
 	})
 
+	batch = batch[limit*page:]
 	if len(batch) > limit {
 		batch = batch[:limit]
 	}
