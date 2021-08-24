@@ -73,7 +73,7 @@ const setLoader = function (value) {
 
 const addEvent = function (e) {
   setLoader(null)
-  const events = document.querySelector('.event-list')
+  const events = document.getElementsByTagName('ul')[0]
   events.innerHTML = `
     <li>
       <div class="event">
@@ -82,6 +82,10 @@ const addEvent = function (e) {
           <a class="show" onclick="dialog('${e.Jid}')">show</a>
       </div>
     </li>` + events.innerHTML
+
+  if (events.children.length > 15) {
+    events.children[events.children.length - 1].remove()
+  }
 }
 
 const fetchEvents = function (filter) {
