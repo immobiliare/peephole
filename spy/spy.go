@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	_config "github.com/streambinder/peephole/config"
 	_mold "github.com/streambinder/peephole/mold"
 	_salt "github.com/streambinder/peephole/salt"
 )
@@ -21,7 +20,7 @@ func init() {
 	}
 }
 
-func Init(db *_mold.Mold, endpoints []*_config.Spy) (*Spy, error) {
+func Init(db *_mold.Mold, endpoints []*Config) (*Spy, error) {
 	var spy = &Spy{
 		make(map[string]string),
 		make(chan *_mold.Event),

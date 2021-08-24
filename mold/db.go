@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/sirupsen/logrus"
-	_config "github.com/streambinder/peephole/config"
 	_util "github.com/streambinder/peephole/util"
 	"github.com/xujiajun/nutsdb"
 )
@@ -22,7 +21,7 @@ const (
 
 type Mold struct {
 	*nutsdb.DB
-	config        *_config.Mold
+	config        *Config
 	opGetMutex    sync.Mutex
 	opGet         chan *Event
 	opSelectMutex sync.Mutex
@@ -31,7 +30,7 @@ type Mold struct {
 	opCount       chan int
 }
 
-func Init(config *_config.Mold) (*Mold, error) {
+func Init(config *Config) (*Mold, error) {
 	opt := nutsdb.DefaultOptions
 	opt.Dir = config.Spool
 	db, err := nutsdb.Open(opt)

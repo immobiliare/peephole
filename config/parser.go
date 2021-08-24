@@ -24,8 +24,16 @@ func Parse(path string) (*Wrapper, error) {
 }
 
 func process(cfg *Wrapper) (*Wrapper, error) {
-	if cfg.Mold.Spool == "" {
-		cfg.Mold.Spool = "/var/spool/peephole"
+	for _, e := range cfg.Spy {
+		if err := e.Validate(); err != nil {
+			return nil, err
+		}
+	}
+	if err := cfg.Kiosk.Validate(); err != nil {
+		return nil, err
+	}
+	if err := cfg.Mold.Validate(); err != nil {
+		return nil, err
 	}
 	return cfg, nil
 }
