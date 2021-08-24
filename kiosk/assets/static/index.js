@@ -96,16 +96,24 @@ const addEvent = function (e) {
     </div>
     </li>` + events.innerHTML
 
-  if (events.children.length > 15) {
+  if (events.children.length > 10) {
     events.children[events.children.length - 1].remove()
   }
 }
 
-const fetchEvents = function (filter) {
-  let path = '/events'
-  if (filter !== null && filter !== '') {
-    path += '?q=' + filter
+const fetchEvents = function () {
+  let path = '/events?'
+  const q = document.querySelector('div.search>input').value
+  if (q !== null && q !== '') {
+    path += '&q=' + q
   }
+  if (p !== null && p >= 0) {
+    path += '&p=' + p
+  }
+
+  document.querySelector('.event-list').innerHTML = ''
+  flushPageCounter()
+  setLoader('...')
 
   fetch(path)
     .then((response) => {
@@ -117,8 +125,25 @@ const fetchEvents = function (filter) {
         }
       } else {
         setLoader('no result found')
+        p--
+        flushPageCounter()
       }
     })
+}
+
+const prevEvents = function () {
+  if (p <= 0) return
+  p--
+  fetchEvents()
+}
+
+const nextEvents = function () {
+  p++
+  fetchEvents()
+}
+
+const flushPageCounter = function () {
+  document.querySelector('div.pager>span').innerText = p + 1
 }
 
 const searchWipe = function () {
@@ -131,16 +156,15 @@ const search = function () {
   if (filter.length < 3 && filter.length > 0) {
     return
   }
-
-  document.querySelector('.event-list').innerHTML = ''
-  setLoader('...')
-  fetchEvents(filter)
+  p = 0
+  fetchEvents()
 }
 
 let es = null
+let p = 0
 
 window.onload = async function () {
-  fetchEvents(null)
+  fetchEvents()
   es = new EventSource('/stream')
   es.onerror = function () {
     document.querySelector('span.liveness').classList.toggle('dead')
@@ -167,6 +191,8 @@ document.onkeydown = async function (e) {
       // (for linting purposes)
       dialog(null)
       searchWipe()
+      prevEvents()
+      nextEvents()
       break
     default:
       break

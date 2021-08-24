@@ -22,6 +22,26 @@ main {
   padding: 20px;
 }
 
+div.search button {
+  border-radius: 7px;
+  font-family: 'Monospace', monospace;
+  color: var(--darker);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5px;
+  border: medium none;
+  background-color: var(--primary-bg);
+  width: 25px;
+  height: 25px;
+  font-size: 1.5em;
+  line-height: 0;
+}
+
+div.search button::after {
+  content: '\2a2f';
+}
+
 header {
   margin: 50px auto;
   position: relative;
@@ -36,6 +56,49 @@ header img {
   position: absolute;
   left: 0;
   width: 40px;
+}
+
+header div.pager {
+  position: absolute;
+  top: 50%;
+  right: 125px;
+  transform: translateY(-50%);
+}
+
+header div.pager span {
+  color: var(--darker);
+  padding: 5px;
+  font-family: 'Monospace', monospace;
+}
+
+header div.pager button {
+  border-radius: 7px;
+  font-family: 'Monospace', monospace;
+  color: var(--darker);
+  border: medium none;
+  background-color: var(--darker-bg);
+  width: 25px;
+  height: 25px;
+  font-size: 1.5em;
+  line-height: 0;
+}
+
+header div.pager button.left::after {
+  content: '\2190';
+}
+
+header div.pager button.right::after {
+  content: '\2192';
+}
+
+div.search button:hover {
+  background-color: var(--darker-bg);
+  cursor: pointer;
+}
+
+header div.pager button:hover {
+  background-color: var(--primary-bg);
+  cursor: pointer;
 }
 
 header span.liveness {
@@ -66,38 +129,13 @@ div.search {
   position: relative;
 }
 
-div.search > input {
+div.search input {
   background-color: var(--darker-bg);
   border: none;
   width: calc(100% - 20px);
   padding: 10px;
   border-radius: 10px;
   color: var(--primary);
-}
-
-div.search > button {
-  border-radius: 7px;
-  font-family: 'Monospace', monospace;
-  color: var(--darker);
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 5px;
-  border: medium none;
-  background-color: var(--primary-bg);
-  width: 25px;
-  height: 25px;
-  font-size: 1.5em;
-  line-height: 0;
-}
-
-div.search > button:hover {
-  background-color: var(--darker-bg);
-  cursor: pointer;
-}
-
-button::after {
-  content: '\2a2f';
 }
 
 p.loading {
@@ -119,7 +157,7 @@ div.event-dialog {
   border-radius: 10px;
 }
 
-div.event-dialog > a.dismiss {
+div.event-dialog a.dismiss {
   position: absolute;
   top: 30px;
   right: 30px;
@@ -129,45 +167,45 @@ div.event-dialog > a.dismiss {
   background-color: var(--primary-bg);
 }
 
-div.event-dialog > a.dismiss:hover {
+div.event-dialog a.dismiss:hover {
   cursor: pointer;
   background-color: var(--darker-bg);
 }
 
-div.event-dialog > pre {
+div.event-dialog pre {
   padding: 20px;
   font-family: 'Monospace', monospace;
 }
 
-div.event-dialog > pre > span.key {
+div.event-dialog pre span.key {
   color: #ddd;
 }
 
-div.event-dialog > pre > span.string {
+div.event-dialog pre span.string {
   color: rgb(46, 204, 113);
 }
 
-div.event-dialog > pre > span.number {
+div.event-dialog pre span.number {
   color: lightblue;
 }
 
-div.event-dialog > pre > span.boolean {
+div.event-dialog pre span.boolean {
   color: yellow;
 }
 
-div.event-dialog > pre > span.date {
+div.event-dialog pre span.date {
   color: brown;
 }
 
-div.event-dialog > pre > span.null {
+div.event-dialog pre span.null {
   color: gray;
 }
 
-div.event-dialog > pre > span.version {
+div.event-dialog pre span.version {
   color: blue;
 }
 
-div.event-dialog > pre > span.container {
+div.event-dialog pre span.container {
   color: gray;
   white-space: pre;
   user-select: text;
@@ -179,62 +217,62 @@ ul.event-list {
   padding: 0;
 }
 
-ul.event-list > li {
+ul.event-list li {
   background-color: var(--darker-bg);
   padding: 15px;
   margin-top: 3px;
 }
 
-ul.event-list > li:first-child {
+ul.event-list li:first-child {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
 
-ul.event-list > li:last-child {
+ul.event-list li:last-child {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
 
-ul.event-list > li > div.event {
+ul.event-list li div.event {
   position: relative;
   text-shadow: 1px 1px 0 var(--darker-bg);
   padding: 5px;
 }
 
-ul.event-list > li > div.event > span {
+ul.event-list li div.event span {
   display: block;
 }
 
-ul.event-list > li > div.event > span.caption > i {
+ul.event-list li div.event span.caption i {
   color: var(--primary-bg);
 }
 
-ul.event-list > li > div.event > span.function > pre {
+ul.event-list li div.event span.function pre {
   color: var(--darker);
   text-transform: lowercase;
 }
 
-ul.event-list > li > div.event > span.function > pre,
-ul.event-list > li > div.event > span.caption > pre {
+ul.event-list li div.event span.function pre,
+ul.event-list li div.event span.caption pre {
   display: inline;
 }
 
-ul.event-list > li > div.event > span.caption > pre {
+ul.event-list li div.event span.caption pre {
   font-size: 1.2em;
 }
 
-ul.event-list > li > div.event > span.caption,
-ul.event-list > li > div.event > a.show {
+ul.event-list li div.event span.caption,
+ul.event-list li div.event a.show {
   color: var(--darker);
 }
 
-ul.event-list > li > div.event > span.function {
+ul.event-list li div.event span.function {
   padding-top: 10px;
   font-size: 1.3em;
   text-transform: uppercase;
 }
 
-ul.event-list > li > div.event > a.show {
+ul.event-list li div.event a.show {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -244,7 +282,7 @@ ul.event-list > li > div.event > a.show {
   border-radius: 5px;
 }
 
-ul.event-list > li > div.event > a.show:hover {
+ul.event-list li div.event a.show:hover {
   cursor: pointer;
   background-color: var(--primary-bg);
 }

@@ -16,6 +16,11 @@
     <main>
         <header>
             <h1><img alt="Peephole" src="/assets/peephole.png" /> {{ .title }}</h1>
+            <div class="pager">
+                <button class="left" onclick="prevEvents()"></button>
+                <span></span>
+                <button class="right" onclick="nextEvents()"></button>
+            </div>
             <span class="liveness">live</span>
         </header>
 
