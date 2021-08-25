@@ -62,9 +62,7 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 	switch fun {
 	case "state.highstate":
 		return parseHighstate(&e, &j)
-	case "state.sls":
-		return parseState(&e, &j)
-	case "state.apply":
+	case "state.sls", "state.apply":
 		return parseState(&e, &j)
 	case "runner.state.orchestrate":
 		return parseOrchestrate(&e, &j)
