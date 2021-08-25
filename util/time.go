@@ -44,6 +44,10 @@ func RetentionSeconds(interval string) (uint32, error) {
 }
 
 func Unit(interval string) (rune, error) {
+	if len(interval) <= 1 {
+		return '0', fmt.Errorf("illegal interval")
+	}
+
 	r := rune(interval[len(interval)-1:][0])
 	switch r {
 	case 'y', 'M', 'd', 'h', 'm', 's':
