@@ -10,10 +10,10 @@ import (
 )
 
 type Pagination struct {
-	Events  []_mold.Event `json:"events"`
-	Page    int           `json:"page"`
-	Limit   int           `json:"limit"`
-	HasNext bool          `json:"has_next"`
+	Events  []_mold.Event
+	Page    int
+	Limit   int
+	HasNext bool
 }
 
 func (k *Kiosk) eventsHandler(c *gin.Context) {

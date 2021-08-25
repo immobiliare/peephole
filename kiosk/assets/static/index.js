@@ -130,15 +130,15 @@ const fetchEvents = function () {
     .then((response) => {
       return response.json()
     }).then((json) => {
-      if (json.events.length > 0) {
-        for (let i = 0; i < json.events.length; i++) {
-          addEvent(json.events[i])
+      if (json.Events.length > 0) {
+        for (let i = 0; i < json.Events.length; i++) {
+          addEvent(json.Events[i])
         }
       } else {
         setLoader('no result found')
       }
 
-      if (!json.has_next) {
+      if (!json.HasNext) {
         toggleButton(false, 'button.right')
       } else {
         toggleButton(true, 'button.right')
@@ -150,7 +150,8 @@ const fetchEvents = function () {
         toggleButton(true, 'button.left')
       }
     })
-    .catch(function () {
+    .catch(function (err) {
+      console.log(err)
       setLoader('unable to query')
     })
 }
