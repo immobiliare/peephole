@@ -24,5 +24,9 @@ func (c *Config) Validate() error {
 		c.Spool = "/var/spool/peephole"
 	}
 
+	if c.Retention == "" {
+		return fmt.Errorf("retention field is mandatory")
+	}
+
 	return nil
 }
