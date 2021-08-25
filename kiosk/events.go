@@ -9,27 +9,34 @@ import (
 	_mold "github.com/streambinder/peephole/mold"
 )
 
+type Pagination struct {
+	Events  []_mold.Event `json:"events"`
+	Page    int           `json:"page"`
+	Limit   int           `json:"limit"`
+	HasNext bool          `json:"has_next"`
+}
+
 func (k *Kiosk) eventsHandler(c *gin.Context) {
 	var (
 		filter = c.Query("q")
 		pPage  = c.DefaultQuery("p", "1")
-		pLimit = c.DefaultQuery("l", "10")
+		pLimit = c.DefaultQuery("l", "7")
 	)
 
-	page, err := strconv.Atoi(pPage)
+	p, err := strconv.Atoi(pPage)
 	if err != nil {
 		logrus.WithError(err).WithField("page", pPage).Errorln("Unable to parse page number")
 	}
 
-	limit, err := strconv.Atoi(pLimit)
+	l, err := strconv.Atoi(pLimit)
 	if err != nil {
 		logrus.WithError(err).WithField("limit", pLimit).Errorln("Unable to parse page limit number")
 	}
 
-	if e, err := k.mold.Select(filter, page, limit); err != nil {
+	if e, err := k.mold.Select(filter, p, l); err != nil {
 		logrus.WithError(err).Warnln("Unable to select events")
 		c.JSON(http.StatusInternalServerError, []_mold.Event{})
 	} else {
-		c.JSON(http.StatusOK, e)
+		c.JSON(http.StatusOK, Pagination{e, p, l, len(e) > 0 && (p+1)*l < k.mold.Count()})
 	}
 }

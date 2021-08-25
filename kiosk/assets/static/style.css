@@ -3,6 +3,7 @@ html {
   --darker: #a6a4a4;
   --primary-bg: #282828;
   --darker-bg: #202020;
+  --darkest-bg: #141414;
   --alert: #ff6969;
   --alert-darker: #963d3d;
 
@@ -60,19 +61,31 @@ header img {
 
 header div.pager {
   position: absolute;
+  width: 80px;
+  height: 25px;
   top: 50%;
-  right: 125px;
+  right: 94px;
   transform: translateY(-50%);
+  padding: 10px 15px;
+  border-right: 0;
+  border-radius: 30px 0 0 30px;
+  background-color: var(--darker-bg);
 }
 
 header div.pager span {
   color: var(--darker);
   padding: 5px;
   font-family: 'Monospace', monospace;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 1px 1px 0 var(--darkest-bg);
+  opacity: 0.75;
 }
 
 header div.pager button {
-  border-radius: 7px;
+  border-radius: 50%;
   font-family: 'Monospace', monospace;
   color: var(--darker);
   border: medium none;
@@ -81,14 +94,32 @@ header div.pager button {
   height: 25px;
   font-size: 1.5em;
   line-height: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+header div.pager button::after {
+  position: absolute;
+  top: calc(50% - 2px);
+}
+
+header div.pager button.left {
+  left: 10px;
 }
 
 header div.pager button.left::after {
   content: '\2190';
+  left: 5px;
+}
+
+header div.pager button.right {
+  right: 10px;
 }
 
 header div.pager button.right::after {
   content: '\2192';
+  right: 5px;
 }
 
 div.search button:hover {
@@ -116,12 +147,12 @@ header span.liveness {
   padding: 10px 15px;
   list-style-position: inside;
   border: 1px solid var(--alert-darker);
-  border-radius: 30px;
+  border-radius: 0 30px 30px 0;
 }
 
 header span.liveness.dead {
   color: var(--darker);
-  border: 1px solid var(--darker);
+  border: 1px solid var(--darker-bg);
   animation: none;
 }
 
@@ -289,6 +320,11 @@ ul.event-list li div.event a.show:hover {
 
 .gone {
   display: none;
+}
+
+.disabled {
+  opacity: 0.25;
+  filter: brightness(0.25);
 }
 
 @keyframes blinker {

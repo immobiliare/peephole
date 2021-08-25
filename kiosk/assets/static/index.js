@@ -84,6 +84,17 @@ const eventFunction = function (e) {
   return `${fnParts[0]} <pre>(${fnParts[1]}</pre>`
 }
 
+const toggleButton = function (status, selector, callback) {
+  const el = document.querySelector(selector)
+  if (status) { // enable
+    el.classList.remove('disabled')
+    el.disabled = false
+  } else { // disable
+    document.querySelector(selector).classList.add('disabled')
+    el.disabled = true
+  }
+}
+
 const addEvent = function (e) {
   setLoader(null)
   const events = document.getElementsByTagName('ul')[0]
@@ -96,7 +107,7 @@ const addEvent = function (e) {
     </div>
     </li>` + events.innerHTML
 
-  if (events.children.length > 10) {
+  if (events.children.length > 7) {
     events.children[events.children.length - 1].remove()
   }
 }
@@ -112,22 +123,35 @@ const fetchEvents = function () {
   }
 
   document.querySelector('.event-list').innerHTML = ''
-  flushPageCounter()
+  document.querySelector('div.pager>span').innerText = p + 1
   setLoader('...')
 
   fetch(path)
     .then((response) => {
       return response.json()
     }).then((json) => {
-      if (json.length > 0) {
-        for (let i = 0; i < json.length; i++) {
-          addEvent(json[i])
+      if (json.events.length > 0) {
+        for (let i = 0; i < json.events.length; i++) {
+          addEvent(json.events[i])
         }
       } else {
         setLoader('no result found')
-        p--
-        flushPageCounter()
       }
+
+      if (!json.has_next) {
+        toggleButton(false, 'button.right')
+      } else {
+        toggleButton(true, 'button.right')
+      }
+
+      if (p === 0) {
+        toggleButton(false, 'button.left')
+      } else {
+        toggleButton(true, 'button.left')
+      }
+    })
+    .catch(function () {
+      setLoader('unable to query')
     })
 }
 
@@ -140,10 +164,6 @@ const prevEvents = function () {
 const nextEvents = function () {
   p++
   fetchEvents()
-}
-
-const flushPageCounter = function () {
-  document.querySelector('div.pager>span').innerText = p + 1
 }
 
 const searchWipe = function () {
@@ -170,7 +190,9 @@ window.onload = async function () {
     document.querySelector('span.liveness').classList.toggle('dead')
   }
   es.addEventListener('event', function (e) {
-    addEvent(JSON.parse(e.data))
+    if (p === 0) {
+      addEvent(JSON.parse(e.data))
+    }
   }, false)
 }
 
@@ -191,8 +213,8 @@ document.onkeydown = async function (e) {
       // (for linting purposes)
       dialog(null)
       searchWipe()
-      prevEvents()
       nextEvents()
+      prevEvents()
       break
     default:
       break
