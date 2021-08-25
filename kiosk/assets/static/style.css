@@ -6,6 +6,8 @@ html {
   --darkest-bg: #141414;
   --alert: #ff6969;
   --alert-darker: #963d3d;
+  --success: #a8c587;
+  --failure: #dd7c7c;
 
   color: var(--primary);
   background-color: var(--primary-bg);
@@ -274,17 +276,13 @@ ul.event-list li div.event span {
   display: block;
 }
 
-ul.event-list li div.event span.caption i {
-  color: var(--primary-bg);
-}
-
 ul.event-list li div.event span.function pre {
   color: var(--darker);
   text-transform: lowercase;
 }
 
-ul.event-list li div.event span.function pre,
-ul.event-list li div.event span.caption pre {
+ul.event-list li div.event span.function *,
+ul.event-list li div.event span.caption * {
   display: inline;
 }
 
@@ -318,6 +316,10 @@ ul.event-list li div.event a.show:hover {
   background-color: var(--primary-bg);
 }
 
+.spacer {
+  color: var(--primary-bg);
+}
+
 .gone {
   display: none;
 }
@@ -325,6 +327,14 @@ ul.event-list li div.event a.show:hover {
 .disabled {
   opacity: 0.25;
   filter: brightness(0.25);
+}
+
+.success {
+  color: var(--success);
+}
+
+.failure {
+  color: var(--failure);
 }
 
 @keyframes blinker {

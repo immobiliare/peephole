@@ -72,16 +72,17 @@ const setLoader = function (value) {
 }
 
 const eventCaption = function (e) {
-  return `${new Date(e.Timestamp).toLocaleString().replace(',', ' at ')} <i>—</i> <pre>${e.Minion}</pre>`
+  return `${new Date(e.Timestamp).toLocaleString().replace(',', ' at ')} <i class="spacer">—</i> <pre>${e.Minion}</pre>`
 }
 
 const eventFunction = function (e) {
   const fnParts = e.Function.split(' (')
+  const prefix = `<span class="${e.Success ? 'success">&#10003;' : 'failure">&#10799;'}</span> <i class="spacer">-</i>`
   if (fnParts.length === 1) {
-    return e.Function
+    return `${prefix} ${e.Function}`
   }
 
-  return `${fnParts[0]} <pre>(${fnParts[1]}</pre>`
+  return `${prefix} ${fnParts[0]} <pre>(${fnParts[1]}</pre>`
 }
 
 const toggleButton = function (status, selector, callback) {
