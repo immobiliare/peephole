@@ -49,7 +49,7 @@ func Init(config *Config) (*Mold, error) {
 		make(chan int),
 	}
 	go func() {
-		logrus.WithField("count", mold.count()).Println("DB succesfully initialized")
+		logrus.WithField("count", mold.Count()).Println("DB succesfully initialized")
 	}()
 
 	return mold, nil
@@ -149,7 +149,7 @@ func (db *Mold) Select(filter string, page, limit int) ([]Event, error) {
 	return batch, nil
 }
 
-func (db *Mold) count() int {
+func (db *Mold) Count() int {
 	db.opCountMutex.Lock()
 	defer db.opCountMutex.Unlock()
 
