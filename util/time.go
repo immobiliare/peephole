@@ -1,15 +1,20 @@
 package util
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
 
-func RetentionSeconds(interval string) uint32 {
-	unit := Unit(interval)
+func RetentionSeconds(interval string) (uint32, error) {
+	unit, err := Unit(interval)
+	if err != nil {
+		return 0, err
+	}
+
 	secs, err := strconv.ParseUint(strings.ReplaceAll(interval, string(unit), ""), 10, 32)
 	if err != nil {
-		return 0
+		return 0, err
 	}
 
 	switch unit {
@@ -35,9 +40,15 @@ func RetentionSeconds(interval string) uint32 {
 	default: // seconds
 	}
 
-	return uint32(secs)
+	return uint32(secs), nil
 }
 
-func Unit(interval string) rune {
-	return []rune(interval[len(interval)-1:])[0]
+func Unit(interval string) (rune, error) {
+	r := rune(interval[len(interval)-1:][0])
+	switch r {
+	case 'y', 'M', 'd', 'h', 'm', 's':
+		return r, nil
+	default:
+		return '0', fmt.Errorf("unsupported unit")
+	}
 }

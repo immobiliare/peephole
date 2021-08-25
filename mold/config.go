@@ -15,17 +15,22 @@ type Config struct {
 }
 
 func (c *Config) Validate() error {
-	i := strings.ReplaceAll(c.Retention, string(_util.Unit(c.Retention)), "")
+	if c.Retention == "" {
+		return fmt.Errorf("retention field is mandatory")
+	}
+
+	u, err := _util.Unit(c.Retention)
+	if err != nil {
+		return fmt.Errorf("unsupported retention unit")
+	}
+
+	i := strings.ReplaceAll(c.Retention, string(u), "")
 	if _, err := strconv.ParseUint(i, 10, 32); err != nil {
 		return fmt.Errorf("malformed retention field")
 	}
 
 	if c.Spool == "" {
 		c.Spool = "/var/spool/peephole"
-	}
-
-	if c.Retention == "" {
-		return fmt.Errorf("retention field is mandatory")
 	}
 
 	return nil

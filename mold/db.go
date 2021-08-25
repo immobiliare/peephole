@@ -63,7 +63,12 @@ func (db *Mold) Write(e *Event) error {
 
 	return db.Update(
 		func(tx *nutsdb.Tx) error {
-			return tx.Put(bucket, []byte(e.Jid), bytes, _util.RetentionSeconds(db.config.Retention))
+			r, err := _util.RetentionSeconds(db.config.Retention)
+			if err != nil {
+				return err
+			} else {
+				return tx.Put(bucket, []byte(e.Jid), bytes, r)
+			}
 		})
 }
 
