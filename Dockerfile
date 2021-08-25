@@ -1,4 +1,4 @@
-FROM golang:1.15
+FROM golang:1.15 as builder
 ENV GO111MODULE=on
 ENV GOOS=linux
 ENV GOARCH=amd64
@@ -12,5 +12,5 @@ RUN make build
 FROM debian:buster
 EXPOSE 8080
 WORKDIR /app/
-COPY --from=0 /app/peephole .
+COPY --from=builder /app/peephole .
 CMD ["./peephole -c /app/configuration.yml"]
