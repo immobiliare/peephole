@@ -123,7 +123,11 @@ func unmarshalData(block []string) (*EventsResponse, error) {
 			// tag/data prefixes drop
 			// sample line expected:
 			// `data: {"tag": "whatevert-tag", "data": { ... }}``
-			msgData = strings.Replace(msg, fmt.Sprintf(`data: {"tag": "%s", "data": `, msgTag), "", 1)
+			tagField := fmt.Sprintf(`"tag": "%s"`, msgTag)
+			msgData = msg[6:]                                                        // data: prefix
+			msgData = strings.Replace(msgData, fmt.Sprintf("%s, ", tagField), "", 1) // tag as a heading field
+			msgData = strings.Replace(msgData, fmt.Sprintf(", %s", tagField), "", 1) // tag as a tailing field
+			msgData = strings.Replace(msgData, `{"data": `, "", 1)                   // data header
 			// trailing curly bracket
 			msgData = msgData[:len(msgData)-1]
 		}
