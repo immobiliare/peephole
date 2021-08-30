@@ -37,8 +37,10 @@ func main() {
 	}
 
 	if config.Debug && !_util.Debugging() {
-		syscall.Exec(os.Args[0], os.Args,
-			append(os.Environ(), []string{fmt.Sprintf("%s=1", _util.DebugKey)}...))
+		if err := syscall.Exec(os.Args[0], os.Args,
+			append(os.Environ(), []string{fmt.Sprintf("%s=1", _util.DebugKey)}...)); err != nil {
+			logrus.WithError(err).Fatalln("Unable to exec proc in debug mode")
+		}
 		exit()
 	}
 
