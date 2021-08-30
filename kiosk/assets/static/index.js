@@ -192,8 +192,11 @@ window.onload = async function () {
     document.querySelector('span.liveness').classList.toggle('dead')
   }
   es.addEventListener('event', function (e) {
-    if (p === 0) {
+    const q = document.querySelector('div.search>input').value
+    if (p === 0 && q.length === 0) {
       addEvent(JSON.parse(e.data))
+    } else {
+      fetchEvents()
     }
   }, false)
 }
