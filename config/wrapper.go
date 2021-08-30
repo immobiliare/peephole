@@ -13,6 +13,7 @@ import (
 // Wrapper represents the abstraction of the parsed
 // configuration file
 type Wrapper struct {
+	Debug bool           `yaml:"debug"`
 	Spy   []*_spy.Config `yaml:"spy"`
 	Kiosk *_kiosk.Config `yaml:"kiosk"`
 	Mold  *_mold.Config  `yaml:"mold"`
