@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
 
@@ -36,7 +35,7 @@ type EventsResponse struct {
 }
 
 func init() {
-	if os.Getenv("DEBUG") != "" {
+	if _util.Debugging() {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 }

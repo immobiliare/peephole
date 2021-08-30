@@ -6,10 +6,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 
 	"github.com/sirupsen/logrus"
+	_util "github.com/streambinder/peephole/util"
 )
 
 type LoginResponse struct {
@@ -24,7 +24,7 @@ type LoginResponse struct {
 }
 
 func init() {
-	if os.Getenv("DEBUG") != "" {
+	if _util.Debugging() {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 }
