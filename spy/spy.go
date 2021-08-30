@@ -1,11 +1,10 @@
 package spy
 
 import (
-	"os"
-
 	"github.com/sirupsen/logrus"
 	_mold "github.com/streambinder/peephole/mold"
 	_salt "github.com/streambinder/peephole/salt"
+	_util "github.com/streambinder/peephole/util"
 )
 
 type Spy struct {
@@ -15,7 +14,7 @@ type Spy struct {
 }
 
 func init() {
-	if os.Getenv("DEBUG") != "" {
+	if _util.Debugging() {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 }
