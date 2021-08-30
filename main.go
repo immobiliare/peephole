@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"syscall"
 
@@ -38,7 +37,7 @@ func main() {
 
 	if config.Debug && !_util.Debugging() {
 		if err := syscall.Exec(os.Args[0], os.Args,
-			append(os.Environ(), []string{fmt.Sprintf("%s=1", _util.DebugKey)}...)); err != nil {
+			append(os.Environ(), []string{_util.DebugKey}...)); err != nil {
 			logrus.WithError(err).Fatalln("Unable to exec proc in debug mode")
 		}
 		exit()
