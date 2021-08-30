@@ -2,7 +2,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
+	"syscall"
 
 	"github.com/sirupsen/logrus"
 	_config "github.com/streambinder/peephole/config"
@@ -32,6 +34,12 @@ func main() {
 	logrus.WithField("path", argConfig).Infoln("Reading configuration file")
 	if config, err = _config.Parse(argConfig); err != nil {
 		logrus.WithError(err).Fatalln("Unable to get config")
+	}
+
+	if config.Debug && !_util.Debugging() {
+		syscall.Exec(os.Args[0], os.Args,
+			append(os.Environ(), []string{fmt.Sprintf("%s=1", _util.DebugKey)}...))
+		exit()
 	}
 
 	logrus.Infoln("Initializing mold")
