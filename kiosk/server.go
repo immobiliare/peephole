@@ -1,11 +1,10 @@
 package kiosk
 
 import (
-	"os"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	_mold "github.com/streambinder/peephole/mold"
+	_util "github.com/streambinder/peephole/util"
 )
 
 type Kiosk struct {
@@ -16,7 +15,7 @@ type Kiosk struct {
 }
 
 func init() {
-	if os.Getenv("DEBUG") != "" {
+	if _util.Debugging() {
 		logrus.SetLevel(logrus.DebugLevel)
 	} else {
 		gin.SetMode(gin.ReleaseMode)
