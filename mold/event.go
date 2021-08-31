@@ -84,7 +84,11 @@ func parseState(e *Event, j *gjson.Result) (*Event, error) {
 		e.Function += fmt.Sprintf(" (%s)", stringifyArray(j.Get("arg").Array()))
 	}
 	e.Minion = j.Get("id").String()
-	e.Success = j.Get("success").Bool()
+	if j.Get("retcode").Exists() {
+		e.Success = j.Get("retcode").Int() == 0
+	} else {
+		e.Success = j.Get("success").Bool()
+	}
 	return parseCommon(e, j)
 }
 
