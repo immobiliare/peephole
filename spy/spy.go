@@ -1,6 +1,7 @@
 package spy
 
 import (
+	"io"
 	"net"
 	"syscall"
 
@@ -91,6 +92,12 @@ func (s *Spy) spy(endpoint, token string, peephole chan *_salt.EventsResponse) e
 		netErr, ok := err.(*net.OpError)
 		if ok && netErr.Err.Error() == syscall.ECONNRESET.Error() {
 			logrus.WithField("endpoint", endpoint).Println("Connection reset: reattaching...")
+			continue
+		}
+
+		if err == io.EOF || err == io.ErrUnexpectedEOF {
+			logrus.WithField("endpoint", endpoint).Println("EOF encountered, restarting...")
+			continue
 		}
 
 		logrus.WithError(err).Fatalln("Unable to watch for events")
