@@ -196,8 +196,6 @@ window.onload = async function () {
     const q = document.querySelector('div.search>input').value
     if (p === 0 && q.length === 0) {
       addEvent(JSON.parse(e.data))
-    } else {
-      fetchEvents()
     }
   }, false)
 }
