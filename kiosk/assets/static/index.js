@@ -3,39 +3,40 @@ const dateFormat = d => `${d.getFullYear()}-${span(d.getMonth() + 1)}-${span(d.g
 const span = i => `${i < 10 ? '0' : ''}${i}`
 
 const syntaxHighlight = function (json) {
-  json = JSON.stringify(json, null, 2)
-  json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  const result = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, function (match) {
-    let cls = ''
-    if (/^"/.test(match)) {
-      if (/:$/.test(match)) {
-        cls = 'key'
-        match = match.substring(1, match.length - 2)
-      } else {
-        if (/"[\d]+"/.test(match)) {
-          cls = 'number'
+  return JSON.stringify(json, null, 2)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, function (match) {
+      let cls = ''
+      if (/^"/.test(match)) {
+        if (/:$/.test(match)) {
+          cls = 'key'
+          match = match.substring(1, match.length - 2)
         } else {
-          cls = 'string'
+          if (/"[\d]+"/.test(match)) {
+            cls = 'number'
+          } else {
+            cls = 'string'
+          }
+          match = match.substring(1, match.length - 1)
+          if (isISODate(match)) {
+            cls = 'date'
+          }
         }
-        match = match.substring(1, match.length - 1)
-        if (isISODate(match)) {
-          cls = 'date'
-        }
+      } else if (/true/.test(match)) {
+        cls = 'boolean success'
+      } else if (/false/.test(match)) {
+        cls = 'boolean failure'
+      } else if (/null/.test(match)) {
+        cls = 'null'
       }
-    } else if (/true|false/.test(match)) {
-      cls = 'boolean'
-    } else if (/null/.test(match)) {
-      cls = 'null'
-    }
-    if (cls === 'key') {
-      return '<span class="' + cls + '">' + match + '</span>:'
-    } else if (cls === 'string') {
-      return '"<span class="' + cls + '">' + match + '</span>"'
-    } else {
-      return '<span class="' + cls + '">' + match + '</span>'
-    }
-  })
-  return result
+      if (cls === 'key') {
+        return '<span class="' + cls + '">' + match + '</span>:'
+      } else if (cls === 'string') {
+        return '"<span class="' + cls + '">' + match + '</span>"'
+      } else {
+        return '<span class="' + cls + '">' + match + '</span>'
+      }
+    })
 }
 
 const dialog = function (jid) {

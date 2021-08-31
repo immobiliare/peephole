@@ -225,15 +225,20 @@ div.event-dialog pre span.key {
 }
 
 div.event-dialog pre span.string {
-  color: rgb(46, 204, 113);
-}
-
-div.event-dialog pre span.number {
   color: lightblue;
 }
 
-div.event-dialog pre span.boolean {
-  color: yellow;
+div.event-dialog pre span.number {
+  color: lightgoldenrodyellow;
+}
+
+div.event-dialog pre span.boolean.success {
+  color: var(--success);
+}
+
+div.event-dialog pre span.boolean.failure {
+  color: var(--alert);
+  text-decoration: underline;
 }
 
 div.event-dialog pre span.date {
