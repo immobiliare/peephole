@@ -143,7 +143,7 @@ func (db *Mold) Select(filter string, page, limit int) ([]Event, error) {
 	}
 
 	sort.Slice(batch, func(i, j int) bool {
-		return batch[i].Timestamp.Before(batch[j].Timestamp)
+		return batch[i].Timestamp.After(batch[j].Timestamp)
 	})
 
 	batch = batch[limit*page:]
