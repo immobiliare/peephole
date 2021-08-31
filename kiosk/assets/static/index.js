@@ -76,13 +76,11 @@ const eventCaption = function (e) {
 }
 
 const eventFunction = function (e) {
-  const fnParts = e.Function.split(' (')
-  const prefix = `<span class="${e.Success ? 'success">&#10003;' : 'failure">&#10799;'}</span> <i class="spacer">-</i>`
-  if (fnParts.length === 1) {
-    return `${prefix} ${e.Function}`
+  const prefix = `<span class="${e.Success ? 'success">&#10003;' : 'failure">&#10799;'}</span> <i class="spacer">-</i> ${e.Function}`
+  if (e.Args !== null && e.Args.length >= 0) {
+    return `${prefix} <i class="spacer">-</i> <pre>${e.Args.join(', ').replace(/(_)?orch(estrate)?\./, '')}</pre>`
   }
-
-  return `${prefix} ${fnParts[0]} <pre>(${fnParts[1]}</pre>`
+  return `${prefix}`
 }
 
 const toggleButton = function (status, selector, callback) {
