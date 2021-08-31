@@ -3,6 +3,7 @@ package spy
 import (
 	"io"
 	"net"
+	"strings"
 	"syscall"
 
 	"github.com/sirupsen/logrus"
@@ -77,6 +78,7 @@ func (s *Spy) Watch() error {
 			"minion":   o.Minion,
 			"jid":      o.Jid,
 			"function": o.Function,
+			"args":     strings.Join(o.Args, ","),
 		}).Println("Event persisted")
 		s.EventChan <- o
 	}
