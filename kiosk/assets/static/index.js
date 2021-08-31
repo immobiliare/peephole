@@ -1,4 +1,6 @@
-const isISODate = date => new Date(date) !== 'Invalid Date' && !isNaN(new Date(date)) && date === new Date(date).toISOString()
+const isISODate = d => new Date(d) !== 'Invalid Date' && !isNaN(new Date(d)) && d === new Date(d).toISOString()
+const dateFormat = d => `${d.getFullYear()}-${span(d.getMonth() + 1)}-${span(d.getDate())} ${span(d.getHours())}:${span(d.getMinutes())}:${span(d.getSeconds())}`
+const span = i => `${i < 10 ? '0' : ''}${i}`
 
 const syntaxHighlight = function (json) {
   json = JSON.stringify(json, null, 2)
@@ -72,7 +74,7 @@ const setLoader = function (value) {
 }
 
 const eventCaption = function (e) {
-  return `${new Date(e.Timestamp).toLocaleString().replace(',', ' at ')} <i class="spacer">—</i> <pre>${e.Minion}</pre>`
+  return `${dateFormat(new Date(e.Timestamp))} <i class="spacer">—</i> <pre>${e.Minion}</pre>`
 }
 
 const eventFunction = function (e) {
