@@ -1,4 +1,4 @@
-package mold
+package event
 
 import (
 	"fmt"
@@ -18,20 +18,6 @@ var (
 		false: 1,
 	}
 )
-
-func TestMatch(t *testing.T) {
-	const val = "peephole"
-	for k, v := range map[string]Event{
-		"jid":      {Jid: val},
-		"function": {Function: val},
-		"minion":   {Minion: val},
-		"master":   {Master: val},
-	} {
-		if !v.Match(val) {
-			t.Errorf("Incorrect unmatch by " + k)
-		}
-	}
-}
 
 func TestParseHighstate(t *testing.T) {
 	var (

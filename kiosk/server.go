@@ -4,13 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	_mold "github.com/streambinder/peephole/mold"
+	_event "github.com/streambinder/peephole/mold/event"
 	_util "github.com/streambinder/peephole/util"
 )
 
 type Kiosk struct {
 	mold      *_mold.Mold
 	router    *gin.Engine
-	eventChan chan *_mold.Event
+	eventChan chan *_event.Event
 	config    *Config
 }
 
@@ -22,7 +23,7 @@ func init() {
 	}
 }
 
-func Init(db *_mold.Mold, eventChan chan *_mold.Event, config *Config) *Kiosk {
+func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 	k := new(Kiosk)
 	k.mold = db
 	k.config = config

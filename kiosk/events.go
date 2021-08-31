@@ -6,11 +6,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	_mold "github.com/streambinder/peephole/mold"
+	_event "github.com/streambinder/peephole/mold/event"
 )
 
 type Pagination struct {
-	Events  []_mold.Event
+	Events  []_event.Event
 	Page    int
 	Limit   int
 	HasNext bool
@@ -35,7 +35,7 @@ func (k *Kiosk) eventsHandler(c *gin.Context) {
 
 	if e, err := k.mold.Select(filter, p, l); err != nil {
 		logrus.WithError(err).Warnln("Unable to select events")
-		c.JSON(http.StatusInternalServerError, []_mold.Event{})
+		c.JSON(http.StatusInternalServerError, []_event.Event{})
 	} else {
 		c.JSON(http.StatusOK, Pagination{e, p, l, len(e) > 0 && (p+1)*l < k.mold.Count()})
 	}

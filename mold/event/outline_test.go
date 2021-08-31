@@ -1,4 +1,4 @@
-package mold
+package event
 
 import "testing"
 

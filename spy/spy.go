@@ -8,13 +8,14 @@ import (
 
 	"github.com/sirupsen/logrus"
 	_mold "github.com/streambinder/peephole/mold"
+	_event "github.com/streambinder/peephole/mold/event"
 	_salt "github.com/streambinder/peephole/salt"
 	_util "github.com/streambinder/peephole/util"
 )
 
 type Spy struct {
 	endpoints map[string]string
-	EventChan chan *_mold.Event
+	EventChan chan *_event.Event
 	db        *_mold.Mold
 }
 
@@ -27,7 +28,7 @@ func init() {
 func Init(db *_mold.Mold, endpoints []*Config) (*Spy, error) {
 	var spy = &Spy{
 		make(map[string]string),
-		make(chan *_mold.Event),
+		make(chan *_event.Event),
 		db,
 	}
 	for _, e := range endpoints {
@@ -62,7 +63,7 @@ func (s *Spy) Watch() error {
 			"tag":      e.Tag,
 		}).Debugln("Event received")
 
-		o, err := _mold.Parse(e.Endpoint, e.Tag, e.Data)
+		o, err := _event.Parse(e.Endpoint, e.Tag, e.Data)
 		if err != nil {
 			logrus.WithError(err).Warnln("Unable to parse event")
 			continue
