@@ -184,10 +184,19 @@ div.event-dialog {
   width: calc(100vw - 40px);
   height: calc(100vh - 40px);
   background-color: var(--darker-bg);
-  z-index: 10;
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: 10px;
+  /* animation */
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 100ms 100ms ease, z-index 100ms 100ms ease;
+}
+
+div.event-dialog.show {
+  z-index: 10;
+  opacity: 1;
+  transition: opacity 100ms 100ms ease;
 }
 
 div.event-dialog a.dismiss {

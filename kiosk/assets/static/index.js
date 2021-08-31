@@ -47,20 +47,14 @@ const dialog = function (jid) {
     .then((response) => {
       return response.json()
     }).then((json) => {
-      const body = document.getElementsByTagName('body')[0]
-      body.innerHTML = `
-        <div class="event-dialog">
-          <a class="dismiss" onclick="dismiss()">close</a>
-          <pre>` + syntaxHighlight(json) + `</pre>
-        </div>` + body.innerHTML
+      const body = document.querySelector('body')
+      document.querySelector('.event-dialog>pre').innerHTML = syntaxHighlight(json)
+      document.querySelector('.event-dialog').classList.toggle('show')
     })
 }
 
 const dismiss = function () {
-  const dialog = document.getElementsByClassName('event-dialog')
-  if (dialog.length > 0) {
-    dialog[0].remove()
-  }
+  document.querySelector('.event-dialog').classList.toggle('show')
 }
 
 const setLoader = function (value) {
