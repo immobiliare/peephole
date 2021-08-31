@@ -85,7 +85,7 @@ const eventFunction = function (e) {
   return `${prefix}`
 }
 
-const toggleButton = function (status, selector, callback) {
+const toggleButton = function (status, selector) {
   const el = document.querySelector(selector)
   if (status) { // enable
     el.classList.remove('disabled')
@@ -110,6 +110,7 @@ const addEvent = function (e) {
 
   if (events.children.length > 7) {
     events.children[events.children.length - 1].remove()
+    toggleButton(true, 'button.right')
   }
 }
 
