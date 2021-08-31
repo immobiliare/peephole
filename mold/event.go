@@ -20,6 +20,7 @@ type Event struct {
 	Jid       string
 	RawData   string
 	Function  string
+	Args      []string
 	Timestamp time.Time
 	Success   bool
 }
@@ -73,6 +74,7 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 
 func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
 	e.Function = "highstate"
+	e.Args = stringifyResults(j.Get("arg").Array())
 	e.Minion = j.Get("id").String()
 	e.Success = j.Get("retcode").Int() == 0
 	return parseCommon(e, j)
@@ -80,9 +82,7 @@ func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
 
 func parseState(e *Event, j *gjson.Result) (*Event, error) {
 	e.Function = "state"
-	if j.Get("arg").IsArray() && j.Get("arg.#").Int() > 0 {
-		e.Function += fmt.Sprintf(" (%s)", stringifyArray(j.Get("arg").Array()))
-	}
+	e.Args = stringifyResults(j.Get("fun_args").Array())
 	e.Minion = j.Get("id").String()
 	if j.Get("retcode").Exists() {
 		e.Success = j.Get("retcode").Int() == 0
@@ -94,9 +94,7 @@ func parseState(e *Event, j *gjson.Result) (*Event, error) {
 
 func parseOrchestrate(e *Event, j *gjson.Result) (*Event, error) {
 	e.Function = "orch"
-	if j.Get("fun_args.0.mods").String() != "" {
-		e.Function += fmt.Sprintf(" (%s)", j.Get("fun_args.0.mods").String())
-	}
+	e.Args = []string{j.Get("fun_args.0.mods").String()}
 	e.Minion = j.Get("fun_args.0.pillar.event_data.id").String()
 	e.Success = j.Get("success").Bool()
 	return parseCommon(e, j)
@@ -110,14 +108,9 @@ func parseCommon(e *Event, j *gjson.Result) (*Event, error) {
 	return e, nil
 }
 
-func stringifyArray(results []gjson.Result) string {
-	var arr = []string{}
+func stringifyResults(results []gjson.Result) (arr []string) {
 	for _, item := range results {
-		itemValue := item.String()
-		if itemValue == "test=True" {
-			itemValue = "test"
-		}
-		arr = append(arr, itemValue)
+		arr = append(arr, item.String())
 	}
-	return strings.Join(arr, ", ")
+	return
 }
