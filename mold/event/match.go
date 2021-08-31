@@ -9,12 +9,22 @@ const (
 	matchSeparator = "::"
 )
 
-func (e *Event) Match(filter string) bool {
+func (e *Event) Match(filter string) (match bool) {
+	if f := strings.Trim(strings.ToLower(filter), " "); f == "success" || f == "failure" {
+		var success bool
+		if f == "success" {
+			success = true
+		}
+		match = match || success == e.Success
+	}
+
 	r, err := regexp.Compile(filter)
 	if err == nil {
-		return e.matchReg(r)
+		match = match || e.matchReg(r)
 	}
-	return e.matchStr(filter)
+
+	match = match || e.matchStr(filter)
+	return
 }
 
 func (e *Event) matchGroup() []string {
