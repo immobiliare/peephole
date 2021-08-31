@@ -47,7 +47,6 @@ const dialog = function (jid) {
     .then((response) => {
       return response.json()
     }).then((json) => {
-      const body = document.querySelector('body')
       document.querySelector('.event-dialog>pre').innerHTML = syntaxHighlight(json)
       document.querySelector('.event-dialog').classList.toggle('show')
     })
