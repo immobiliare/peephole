@@ -7,11 +7,11 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 COPY . .
-RUN make build
+RUN go install github.com/gobuffalo/packr/packr \
+ && make build
 
 FROM debian:buster
 EXPOSE 8080
 WORKDIR /app
 COPY --from=builder /app/peephole .
-COPY --from=builder /app/kiosk/assets kiosk/assets
 CMD ["./peephole", "-c", "./configuration.yml"]

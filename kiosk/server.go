@@ -2,6 +2,7 @@ package kiosk
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gobuffalo/packr"
 	"github.com/sirupsen/logrus"
 	_mold "github.com/streambinder/peephole/mold"
 	_event "github.com/streambinder/peephole/mold/event"
@@ -13,6 +14,7 @@ type Kiosk struct {
 	router    *gin.Engine
 	eventChan chan *_event.Event
 	config    *Config
+	boxes     map[string]packr.Box
 }
 
 func init() {
@@ -29,12 +31,15 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 	k.config = config
 	k.router = gin.Default()
 	k.eventChan = eventChan
-	k.router.LoadHTMLGlob("kiosk/assets/templates/*html")
+	k.boxes = map[string]packr.Box{
+		"static":    packr.NewBox("assets/static"),
+		"templates": packr.NewBox("assets/templates"),
+	}
 	k.router.GET("/ping", k.pingHandler)
 	k.router.GET("/stream", k.streamHandler)
 
 	_priv := k.router.Group("/", gin.BasicAuth(gin.Accounts(config.BasicAuth)))
-	_priv.Static("/assets", "kiosk/assets/static")
+	_priv.StaticFS("/assets", k.boxes["static"])
 	_priv.GET("/", k.indexHandler)
 	_priv.GET("/events", k.eventsHandler)
 	_priv.GET("/events/:jid", k.eventHandler)
