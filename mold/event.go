@@ -18,7 +18,7 @@ type Event struct {
 	Minion    string
 	Tag       string
 	Jid       string
-	RawData   string
+	Raw       string
 	Function  string
 	Args      []string
 	Timestamp time.Time
@@ -55,7 +55,7 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 		return nil, fmt.Errorf("data structure is not a valid JSON")
 	}
 	var (
-		e = Event{Master: endpoint, Tag: tag, RawData: data}
+		e = Event{Master: endpoint, Tag: tag, Raw: data}
 		j = gjson.Parse(data)
 	)
 
