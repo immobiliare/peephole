@@ -40,11 +40,14 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 	k.router.GET("/ping", k.pingHandler)
 	k.router.GET("/stream", k.streamHandler)
 
-	_priv := k.router.Group("/", gin.BasicAuth(gin.Accounts(config.BasicAuth)))
-	_priv.StaticFS("/assets", k.boxes["static"])
-	_priv.GET("/", k.indexHandler)
-	_priv.GET("/events", k.eventsHandler)
-	_priv.GET("/events/:jid", k.eventHandler)
+	group := k.router.Group("/")
+	if len(config.BasicAuth) > 0 {
+		group = k.router.Group("/", gin.BasicAuth(gin.Accounts(config.BasicAuth)))
+	}
+	group.StaticFS("/assets", k.boxes["static"])
+	group.GET("/", k.indexHandler)
+	group.GET("/events", k.eventsHandler)
+	group.GET("/events/:jid", k.eventHandler)
 
 	return k
 }
