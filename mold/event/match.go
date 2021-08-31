@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+const (
+	matchSeparator = "::"
+)
+
 func (e *Event) Match(filter string) bool {
 	r, err := regexp.Compile(filter)
 	if err == nil {
@@ -14,7 +18,13 @@ func (e *Event) Match(filter string) bool {
 }
 
 func (e *Event) matchGroup() []string {
-	return []string{e.Jid, e.Function, e.Minion, e.Master}
+	return []string{
+		e.Jid,
+		e.Function,
+		e.Minion,
+		e.Master,
+		strings.Join(e.Args, matchSeparator),
+	}
 }
 
 func (e *Event) matchReg(r *regexp.Regexp) bool {
@@ -27,5 +37,5 @@ func (e *Event) matchReg(r *regexp.Regexp) bool {
 }
 
 func (e *Event) matchStr(s string) bool {
-	return strings.Contains(strings.Join(e.matchGroup(), "::"), s)
+	return strings.Contains(strings.Join(e.matchGroup(), matchSeparator), s)
 }
