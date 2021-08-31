@@ -1,6 +1,7 @@
 package kiosk
 
 import (
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr"
 	"github.com/sirupsen/logrus"
@@ -29,12 +30,13 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 	k := new(Kiosk)
 	k.mold = db
 	k.config = config
-	k.router = gin.Default()
 	k.eventChan = eventChan
 	k.boxes = map[string]packr.Box{
 		"static":    packr.NewBox("assets/static"),
 		"templates": packr.NewBox("assets/templates"),
 	}
+	k.router = gin.Default()
+	k.router.Use(gzip.Gzip(gzip.DefaultCompression))
 	k.router.GET("/ping", k.pingHandler)
 	k.router.GET("/stream", k.streamHandler)
 

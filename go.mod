@@ -3,6 +3,7 @@ module github.com/streambinder/peephole
 go 1.16
 
 require (
+	github.com/gin-contrib/gzip v0.0.3
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/gobuffalo/envy v1.9.0 // indirect
