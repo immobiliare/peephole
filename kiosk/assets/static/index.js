@@ -51,7 +51,7 @@ const dialog = function (jid) {
       body.innerHTML = `
         <div class="event-dialog">
           <a class="dismiss" onclick="dismiss()">close</a>
-          <pre>` + syntaxHighlight(JSON.parse(json.RawData)) + `</pre>
+          <pre>` + syntaxHighlight(json) + `</pre>
         </div>` + body.innerHTML
     })
 }

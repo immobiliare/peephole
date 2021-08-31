@@ -12,6 +12,8 @@ func (k *Kiosk) eventHandler(c *gin.Context) {
 		logrus.WithError(err).WithField("jid", c.Param("jid")).Errorln("Unable to query event")
 		c.Status(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, e)
+		c.Writer.Header().Set("Content-Type", "application/json")
+		c.Next()
+		c.String(http.StatusOK, e.Raw)
 	}
 }
