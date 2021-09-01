@@ -67,14 +67,14 @@ header div.control-panel {
   width: 200px;
   height: 50px;
   top: 0;
-  border: 1px solid var(--darkest-bg);
+  border: 1px solid var(--darker-bg);
   border-radius: 30px;
   transform: translateY(-8px);
 }
 
 header div.control-panel div.pager {
   width: 55%;
-  border-right: 1px solid var(--darkest-bg);
+  border-right: 1px solid var(--darker-bg);
   height: 100%;
 }
 
