@@ -15,7 +15,10 @@ func (db *Mold) Read(jid string) (*_event.Event, error) {
 		if err := db.View(
 			func(tx *nutsdb.Tx) error {
 				data, err := tx.Get(bucket, []byte(jid))
-				if err != nil {
+				if err != nil && err.Error() == "key not found" {
+					db.opGet <- nil
+					return nil
+				} else if err != nil {
 					db.opGet <- nil
 					return err
 				}
