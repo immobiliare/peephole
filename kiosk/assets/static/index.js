@@ -184,7 +184,7 @@ window.onload = async function () {
   fetchEvents()
   es = new EventSource('/stream')
   es.onerror = function () {
-    document.querySelector('span.liveness').classList.toggle('dead')
+    document.querySelector('div.liveness').classList.toggle('dead')
   }
   es.addEventListener('event', function (e) {
     const q = document.querySelector('div.search>input').value

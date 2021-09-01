@@ -61,32 +61,41 @@ header img {
   width: 40px;
 }
 
-header div.pager {
+header div.control-panel {
   position: absolute;
-  width: 80px;
-  height: 25px;
-  top: 50%;
-  right: 94px;
-  transform: translateY(-50%);
-  padding: 10px 15px;
-  border-right: 0;
-  border-radius: 30px 0 0 30px;
-  background-color: var(--darker-bg);
+  right: 0;
+  width: 200px;
+  height: 50px;
+  top: 0;
+  border: 1px solid var(--darkest-bg);
+  border-radius: 30px;
+  transform: translateY(-8px);
 }
 
-header div.pager span {
+header div.control-panel div.pager {
+  width: 55%;
+  border-right: 1px solid var(--darkest-bg);
+  height: 100%;
+}
+
+header div.control-panel div.pager span {
   color: var(--darker);
   padding: 5px;
   font-family: 'Monospace', monospace;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 55px;
   transform: translate(-50%, -50%);
   text-shadow: 1px 1px 0 var(--darkest-bg);
   opacity: 0.75;
 }
 
-header div.pager button {
+div.search button:hover {
+  background-color: var(--darker-bg);
+  cursor: pointer;
+}
+
+header div.control-panel div.pager button {
   border-radius: 50%;
   font-family: 'Monospace', monospace;
   color: var(--darker);
@@ -101,40 +110,35 @@ header div.pager button {
   transform: translateY(-50%);
 }
 
-header div.pager button::after {
+header div.control-panel div.pager button::after {
   position: absolute;
   top: calc(50% - 2px);
 }
 
-header div.pager button.left {
+header div.control-panel div.pager button.left {
   left: 10px;
 }
 
-header div.pager button.left::after {
+header div.control-panel div.pager button.left::after {
   content: '\2190';
   left: 5px;
 }
 
-header div.pager button.right {
-  right: 10px;
+header div.control-panel div.pager button.right {
+  left: 75px;
 }
 
-header div.pager button.right::after {
+header div.control-panel div.pager button.right::after {
   content: '\2192';
   right: 5px;
 }
 
-div.search button:hover {
-  background-color: var(--darker-bg);
-  cursor: pointer;
-}
-
-header div.pager button:hover {
+header div.control-panel div.pager button:hover {
   background-color: var(--primary-bg);
   cursor: pointer;
 }
 
-header span.liveness {
+header div.control-panel div.liveness span {
   text-transform: uppercase;
   color: var(--alert);
   text-shadow: 1px 2px 0 var(--darker-bg);
@@ -148,14 +152,6 @@ header span.liveness {
   font-size: 1.25em;
   padding: 10px 15px;
   list-style-position: inside;
-  border: 1px solid var(--alert-darker);
-  border-radius: 0 30px 30px 0;
-}
-
-header span.liveness.dead {
-  color: var(--darker);
-  border: 1px solid var(--darker-bg);
-  animation: none;
 }
 
 div.search {
@@ -329,6 +325,13 @@ ul.event-list li div.event a.show {
 ul.event-list li div.event a.show:hover {
   cursor: pointer;
   background-color: var(--primary-bg);
+}
+
+header div.control-panel div.liveness.dead span {
+  display: block;
+  right: 10px;
+  color: var(--darker);
+  animation: none;
 }
 
 .spacer {

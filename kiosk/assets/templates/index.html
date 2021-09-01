@@ -21,12 +21,16 @@
     <main>
         <header>
             <h1><img alt="Peephole" src="/assets/peephole.png" /> Peephole</h1>
-            <div class="pager">
-                <button class="left disabled" onclick="prevEvents()"></button>
-                <span></span>
-                <button class="right disabled" onclick="nextEvents()"></button>
+            <div class="control-panel">
+                <div class="pager">
+                    <button class="left disabled" onclick="prevEvents()"></button>
+                    <span></span>
+                    <button class="right disabled" onclick="nextEvents()"></button>
+                </div>
+                <div class="liveness">
+                    <span>live</span>
+                </div>
             </div>
-            <span class="liveness">live</span>
         </header>
 
         <div class="search">
