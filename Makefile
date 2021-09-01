@@ -3,13 +3,23 @@ PACKR ?= packr
 BINARY_NAME = peephole
 GOFLAGS :=
 STATIC := 1
-VERSION := $(shell git describe --abbrev=0 --tags)
 DOCKER ?= docker
-DOCKER_TAG = $(REGISTRY)/peephole:$(VERSION)
+VERSION := latest
+RELEASE ?=
+REGISTRY ?=
+DOCKER_TAG = $(REGISTRY)peephole:$(VERSION)
 LDFLAGS = -X main.version=$(VERSION)
 
 ifeq ($(STATIC), 1)
 LDFLAGS += -s -w -extldflags "-static"
+endif
+
+ifneq ($(RELEASE),)
+VERSION := $(shell git describe --abbrev=0 --tags)
+endif
+
+ifneq ($(REGISTRY),)
+REGISTRY := $(REGISTRY)/
 endif
 
 .PHONY: all
