@@ -49,12 +49,12 @@ const dialog = function (jid) {
       return response.json()
     }).then((json) => {
       document.querySelector('.event-dialog>pre').innerHTML = syntaxHighlight(json)
-      document.querySelector('.event-dialog').classList.toggle('show')
+      document.querySelector('.event-dialog').classList.add('show')
     })
 }
 
 const dismiss = function () {
-  document.querySelector('.event-dialog').classList.toggle('show')
+  document.querySelector('.event-dialog').classList.remove('show')
 }
 
 const setLoader = function (value) {
