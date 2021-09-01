@@ -93,12 +93,12 @@ func (s *Spy) spy(endpoint, token string, peephole chan *_salt.EventsResponse) e
 		}
 
 		netErr, ok := err.(*net.OpError)
-		if ok && netErr.Err.Error() == syscall.ECONNRESET.Error() {
+		if ok && netErr.Err == syscall.ECONNRESET {
 			logrus.WithField("endpoint", endpoint).Println("Connection reset: reattaching...")
 			continue
 		}
 
-		if err == io.EOF || err == io.ErrUnexpectedEOF {
+		if err.Error() == "http: unexpected EOF reading trailer" || err == io.EOF || err == io.ErrUnexpectedEOF {
 			logrus.WithField("endpoint", endpoint).Println("EOF encountered, restarting...")
 			continue
 		}
