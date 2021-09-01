@@ -62,7 +62,7 @@ func main() {
 		}
 	}()
 
-	logrus.Infoln("Starting kiosk server")
+	logrus.WithField("bind", config.Kiosk.Bind).Infoln("Starting kiosk server")
 	kiosk = _kiosk.Init(mold, spy.EventChan, config.Kiosk)
 	if err := kiosk.Serve(); err != nil {
 		logrus.WithError(err).Errorln("Unable to serve connections")
