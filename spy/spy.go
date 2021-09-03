@@ -1,10 +1,7 @@
 package spy
 
 import (
-	"io"
-	"net"
 	"strings"
-	"syscall"
 
 	"github.com/sirupsen/logrus"
 	_mold "github.com/streambinder/peephole/mold"
@@ -88,21 +85,8 @@ func (s *Spy) Watch() error {
 func (s *Spy) spy(endpoint, token string, peephole chan *_salt.EventsResponse) error {
 	for {
 		err := _salt.Events(endpoint, token, peephole)
-		if err == nil {
-			continue
+		if err != nil {
+			logrus.WithError(err).Warnln("Spying interrupted, retrying")
 		}
-
-		netErr, ok := err.(*net.OpError)
-		if ok && netErr.Err == syscall.ECONNRESET {
-			logrus.WithField("endpoint", endpoint).Println("Connection reset: reattaching...")
-			continue
-		}
-
-		if err.Error() == "http: unexpected EOF reading trailer" || err == io.EOF || err == io.ErrUnexpectedEOF {
-			logrus.WithField("endpoint", endpoint).Println("EOF encountered, restarting...")
-			continue
-		}
-
-		logrus.WithError(err).Fatalln("Unable to watch for events")
 	}
 }
