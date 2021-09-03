@@ -8,6 +8,9 @@ import (
 )
 
 func (k *Kiosk) indexHandler(c *gin.Context) {
+	// TODO:
+	// - use minified template
+	// - render html as template
 	if html, err := k.boxes["templates"].FindString("index.html"); err != nil {
 		logrus.WithError(err).WithField("jid", c.Param("jid")).Errorln("Unable to query event")
 		c.Status(http.StatusNotFound)

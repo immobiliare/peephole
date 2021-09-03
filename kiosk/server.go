@@ -36,11 +36,16 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 		"static":    packr.NewBox("assets/static"),
 		"templates": packr.NewBox("assets/templates"),
 	}
-	k.minifier = newMinifyFS(k.boxes["static"])
+	logrus.Println(k.boxes["static"].Path)
+	k.minifier = newMinifyFS(k.boxes["static"], "/assets")
+
 	k.router = gin.Default()
+	k.router.Use(cacheControl)
 	k.router.Use(gzip.Gzip(gzip.DefaultCompression))
+
 	k.router.GET("/ping", k.pingHandler)
 	k.router.GET("/stream", k.streamHandler)
+	k.router.GET("/favicon.ico", k.faviconHandler)
 
 	group := k.router.Group("/")
 	if len(config.BasicAuth) > 0 {

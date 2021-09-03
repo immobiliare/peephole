@@ -43,8 +43,11 @@ func minifier() *minify.M {
 	return m
 }
 
-func newMinifyFS(fs http.FileSystem) minifyFS {
-	return minifyFS{proxy: fs, minifier: minifier()}
+func newMinifyFS(fs http.FileSystem, prefix string) minifyFS {
+	return minifyFS{
+		proxy:    fs,
+		minifier: minifier(),
+	}
 }
 
 func (fs minifyFS) Open(name string) (http.File, error) {
@@ -71,6 +74,7 @@ func (fs minifyFS) Open(name string) (http.File, error) {
 	}
 
 	cache[name] = minFile
+	logrus.WithField("count", len(cache)).Println("Minified asset added to the cache")
 	return minFile, nil
 }
 
