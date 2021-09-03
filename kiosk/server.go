@@ -16,6 +16,7 @@ type Kiosk struct {
 	eventChan chan *_event.Event
 	config    *Config
 	boxes     map[string]packr.Box
+	minifier  minifyFS
 }
 
 func init() {
@@ -35,6 +36,7 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 		"static":    packr.NewBox("assets/static"),
 		"templates": packr.NewBox("assets/templates"),
 	}
+	k.minifier = newMinifyFS(k.boxes["static"])
 	k.router = gin.Default()
 	k.router.Use(gzip.Gzip(gzip.DefaultCompression))
 	k.router.GET("/ping", k.pingHandler)
@@ -44,7 +46,7 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 	if len(config.BasicAuth) > 0 {
 		group = k.router.Group("/", gin.BasicAuth(gin.Accounts(config.BasicAuth)))
 	}
-	group.StaticFS("/assets", k.boxes["static"])
+	group.StaticFS("/assets", k.minifier)
 	group.GET("/", k.indexHandler)
 	group.GET("/events", k.eventsHandler)
 	group.GET("/events/:jid", k.eventHandler)
