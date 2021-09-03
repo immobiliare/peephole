@@ -9,14 +9,23 @@ import (
 
 func (k *Kiosk) indexHandler(c *gin.Context) {
 	// TODO:
-	// - use minified template
 	// - render html as template
-	if html, err := k.templates.FindString("index.html"); err != nil {
+	const (
+		template = "index.html"
+		mimetype = "text/html"
+	)
+
+	html, err := k.templates.Find(template)
+	if err != nil {
 		logrus.WithError(err).WithField("jid", c.Param("jid")).Errorln("Unable to query event")
 		c.Status(http.StatusNotFound)
-	} else {
-		c.Writer.Header().Set("Content-Type", "text/html")
-		c.Next()
-		c.String(http.StatusOK, html)
 	}
+
+	min, err := k.minifier.Minify(template, html)
+	if err != nil {
+		logrus.WithError(err).WithField("jid", c.Param("jid")).Errorln("Unable to minify template")
+		c.Status(http.StatusNotFound)
+	}
+
+	c.Data(http.StatusOK, mimetype, min)
 }
