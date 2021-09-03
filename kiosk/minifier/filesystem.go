@@ -2,7 +2,6 @@ package minifier
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"net/http"
 	"path/filepath"
@@ -49,24 +48,8 @@ func Init(proxy http.FileSystem) *FS {
 }
 
 func (fs FS) Open(name string) (http.File, error) {
-	// for k, _ := range fs.cache {
-	// 	logrus.Println("cache entry " + k)
-	// 	info, err := v.Stat()
-	// 	if err != nil {
-	// 		logrus.WithField("k", k).Debugln("Unable to read cache entry")
-	// 	} else {
-	// 		buf := make([]byte, 30)
-	// 		v.Read(buf)
-	// 		logrus.WithFields(logrus.Fields{
-	// 			"k":      k,
-	// 			"len":    info.Size(),
-	// 			"prefix": string(buf),
-	// 		}).Debugln("Cache entry found")
-	// 	}
-	// }
-
 	if min, ok := fs.cache[name]; ok {
-		logrus.WithField("name", name).Debugln("Reusing cached minified asset")
+		logrus.WithField("name", name).Debugln("Reusing cached minified static resource")
 		return packd.NewFile(name, bytes.NewReader(min))
 	}
 
@@ -75,21 +58,6 @@ func (fs FS) Open(name string) (http.File, error) {
 		return nil, err
 	}
 
-	min, err := fs.Minify(f)
-	if err != nil {
-		return f, err
-	}
-
-	return min, nil
-}
-
-func (fs FS) Minify(f http.File) (http.File, error) {
-	info, err := f.Stat()
-	if err != nil {
-		return f, err
-	}
-
-	name := fmt.Sprintf("/%s", info.Name())
 	mimetype, ok := mimetypes[filepath.Ext(name)]
 	if !ok {
 		logrus.WithField("name", name).Debugln("No minifier available")
@@ -102,16 +70,31 @@ func (fs FS) Minify(f http.File) (http.File, error) {
 		return f, nil
 	}
 
-	return min, nil
+	return packd.NewFile(name, bytes.NewReader(min))
 }
 
-func (fs FS) minify(name, mediatype string, f http.File) (http.File, error) {
+func (fs FS) Minify(name string, data []byte) ([]byte, error) {
+	if min, ok := fs.cache["/"+name]; ok {
+		logrus.WithField("name", name).Debugln("Reusing cached minified asset")
+		return min, nil
+	}
+
+	mimetype, ok := mimetypes[filepath.Ext(name)]
+	if !ok {
+		logrus.WithField("name", name).Debugln("No minifier available")
+		return data, nil
+	}
+
+	return fs.minify(name, mimetype, bytes.NewReader(data))
+}
+
+func (fs FS) minify(name, mediatype string, r io.Reader) ([]byte, error) {
 	buf := &bytes.Buffer{}
-	err := fs.minifier.Minify(mediatype, buf, f)
+	err := fs.minifier.Minify(mediatype, buf, r)
 	if err != nil {
-		return f, err
+		return nil, err
 	}
 
 	fs.cache["/"+name] = buf.Bytes()
-	return packd.NewFile(name, bytes.NewReader(buf.Bytes()))
+	return buf.Bytes(), nil
 }
