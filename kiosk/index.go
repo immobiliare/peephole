@@ -8,6 +8,8 @@ import (
 )
 
 func (k *Kiosk) indexHandler(c *gin.Context) {
+	// TODO:
+	// - render html as template (https://github.com/gin-gonic/gin/issues/2855)
 	const (
 		template = "index.html"
 		mimetype = "text/html"
