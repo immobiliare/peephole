@@ -1,6 +1,8 @@
 package kiosk
 
 import (
+	"regexp"
+
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr"
@@ -37,8 +39,13 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 	k.minifier = _min.Init(packr.NewBox("assets/static"))
 
 	k.router = gin.Default()
-	k.router.Use(cacheControl)
 	k.router.Use(gzip.Gzip(gzip.DefaultCompression))
+	k.router.Use(func(c *gin.Context) {
+		if regexp.MustCompile(".(js|css|ico|png)$").MatchString(c.Request.URL.Path) {
+			c.Header("cache-control", "max-age=315360000; public")
+		}
+		c.Next()
+	})
 
 	k.router.GET("/ping", k.pingHandler)
 	k.router.GET("/stream", k.streamHandler)
