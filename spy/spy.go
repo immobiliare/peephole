@@ -2,6 +2,7 @@ package spy
 
 import (
 	"strings"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	_mold "github.com/streambinder/peephole/mold"
@@ -83,10 +84,15 @@ func (s *Spy) Watch() error {
 }
 
 func (s *Spy) spy(endpoint, token string, peephole chan *_salt.EventsResponse) error {
-	for {
+	t := time.NewTicker(5 * time.Minute)
+	defer t.Stop()
+
+	for ; true; <-t.C {
 		err := _salt.Events(endpoint, token, peephole)
 		if err != nil {
 			logrus.WithError(err).Warnln("Spying interrupted, retrying")
 		}
 	}
+
+	return nil
 }
