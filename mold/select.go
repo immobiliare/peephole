@@ -25,7 +25,7 @@ func (db *Mold) Select(filter string, page, limit int) ([]_event.Event, error) {
 	}
 
 	if err != nil &&
-		(err.Error() == "prefix scans no result" || err.Error() == "prefix and search scans not found") {
+		(err.Error() == "prefix scans not found" || err.Error() == "prefix and search scans not found") {
 		return []_event.Event{}, nil
 	} else if err != nil {
 		return []_event.Event{}, err

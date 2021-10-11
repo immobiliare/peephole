@@ -23,7 +23,7 @@ func (db *Mold) Count(filter string) (int, error) {
 	}
 
 	if err != nil &&
-		(err.Error() == "prefix scans no result" || err.Error() == "prefix and search scans not found") {
+		(err.Error() == "prefix scans not found" || err.Error() == "prefix and search scans not found") {
 		return 0, nil
 	} else if err != nil {
 		return 0, err
