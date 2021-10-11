@@ -8,7 +8,6 @@ type Event struct {
 	Master    string
 	Minion    string
 	Tag       string
-	ID        string
 	Jid       string
 	Raw       string
 	Function  string

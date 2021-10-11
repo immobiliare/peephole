@@ -40,11 +40,6 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 		return nil, err
 	}
 
-	e.ID, err = idFromJid(e.Jid)
-	if err != nil {
-		return nil, fmt.Errorf("unable to parse ID from Jid %s", e.Jid)
-	}
-
 	return e, nil
 }
 
@@ -89,8 +84,4 @@ func stringifyResults(results []gjson.Result) (arr []string) {
 		arr = append(arr, item.String())
 	}
 	return
-}
-
-func idFromJid(jid string) (string, error) {
-	return "", nil
 }
