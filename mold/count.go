@@ -1,15 +1,32 @@
 package mold
 
-func (db *Mold) Count() (int, error) {
+import (
+	"github.com/xujiajun/nutsdb"
+)
+
+func (db *Mold) Count(filter string) (int, error) {
+	var (
+		data nutsdb.Entries
+		err  error
+	)
+
 	tx, err := db.Begin(false)
 	if err != nil {
 		return -1, err
 	}
 	defer tx.Rollback()
 
-	data, err := tx.GetAll(bucket)
-	if err != nil {
-		return -1, err
+	if filter != "" {
+		data, _, err = tx.PrefixSearchScan(bucket, []byte{}, filter, 0, -1)
+	} else {
+		data, _, err = tx.PrefixScan(bucket, []byte{}, 0, -1)
+	}
+
+	if err != nil &&
+		(err.Error() == "prefix scans no result" || err.Error() == "prefix and search scans not found") {
+		return 0, nil
+	} else if err != nil {
+		return 0, err
 	}
 
 	return len(data), nil
