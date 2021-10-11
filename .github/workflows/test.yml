@@ -37,6 +37,7 @@ jobs:
   docker: 
     needs: [test, scan, lint]
     if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
