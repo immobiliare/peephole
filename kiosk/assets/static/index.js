@@ -39,12 +39,12 @@ const syntaxHighlight = function (json) {
     })
 }
 
-const dialog = function (jid) {
-  if (jid === null) {
+const dialog = function (id) {
+  if (id === null) {
     return
   }
 
-  fetch(`/events/${jid}`)
+  fetch(`/events/${id}`)
     .then((response) => {
       return response.json()
     }).then((json) => {
@@ -98,7 +98,7 @@ const addEvent = function (e) {
     <div class="event">
       <span class="caption">${eventCaption(e)}</span>
       <span class="function">${eventFunction(e)}</span>
-      <a class="show" onclick="dialog('${e.Jid}')">show</a>
+      <a class="show" onclick="dialog('${e.ID}')">show</a>
     </div>
     </li>` + events.innerHTML
 
