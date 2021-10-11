@@ -19,7 +19,7 @@ type Pagination struct {
 func (k *Kiosk) eventsHandler(c *gin.Context) {
 	var (
 		filter = c.Query("q")
-		pPage  = c.DefaultQuery("p", "1")
+		pPage  = c.DefaultQuery("p", "0")
 		pLimit = c.DefaultQuery("l", "7")
 	)
 
