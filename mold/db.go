@@ -1,10 +1,7 @@
 package mold
 
 import (
-	"sync"
-
 	"github.com/sirupsen/logrus"
-	_event "github.com/streambinder/peephole/mold/event"
 	"github.com/xujiajun/nutsdb"
 )
 
@@ -20,13 +17,7 @@ const (
 
 type Mold struct {
 	*nutsdb.DB
-	config        *Config
-	opGetMutex    sync.Mutex
-	opGet         chan *_event.Event
-	opSelectMutex sync.Mutex
-	opSelect      chan []_event.Event
-	opCountMutex  sync.Mutex
-	opCount       chan int
+	config *Config
 }
 
 func Init(config *Config) (*Mold, error) {
@@ -37,18 +28,13 @@ func Init(config *Config) (*Mold, error) {
 		return nil, err
 	}
 
-	mold := &Mold{
-		db,
-		config,
-		sync.Mutex{},
-		make(chan *_event.Event),
-		sync.Mutex{},
-		make(chan []_event.Event),
-		sync.Mutex{},
-		make(chan int),
-	}
+	mold := &Mold{db, config}
 	go func() {
-		logrus.WithField("count", mold.Count()).Println("DB succesfully initialized")
+		if count, err := mold.Count(); err != nil {
+			logrus.WithError(err).Errorln("Unable to cound DB entries")
+		} else {
+			logrus.WithField("count", count).Println("DB succesfully initialized")
+		}
 	}()
 
 	return mold, nil

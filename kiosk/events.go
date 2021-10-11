@@ -37,6 +37,10 @@ func (k *Kiosk) eventsHandler(c *gin.Context) {
 		logrus.WithError(err).Warnln("Unable to select events")
 		c.JSON(http.StatusInternalServerError, []_event.Event{})
 	} else {
-		c.JSON(http.StatusOK, Pagination{e, p, l, len(e) > 0 && (p+1)*l < k.mold.Count()})
+		cnt, err := k.mold.Count()
+		if err != nil {
+			logrus.WithError(err).Errorln("Unable to count DB entries")
+		}
+		c.JSON(http.StatusOK, Pagination{e, p, l, len(e) > 0 && (p+1)*l < cnt})
 	}
 }

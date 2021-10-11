@@ -16,21 +16,36 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 		return nil, fmt.Errorf("data structure is not a valid JSON")
 	}
 	var (
-		e = Event{Master: endpoint, Tag: tag, Raw: data}
+		e = &Event{Master: endpoint, Tag: tag, Raw: data}
 		j = gjson.Parse(data)
 	)
 
-	fun := j.Get("fun").String()
+	var (
+		fun    = j.Get("fun").String()
+		parser func(e *Event, j *gjson.Result) (*Event, error)
+	)
 	switch fun {
 	case "state.highstate":
-		return parseHighstate(&e, &j)
+		parser = parseHighstate
 	case "state.sls", "state.apply":
-		return parseState(&e, &j)
+		parser = parseState
 	case "runner.state.orchestrate":
-		return parseOrchestrate(&e, &j)
+		parser = parseOrchestrate
+	default:
+		return nil, fmt.Errorf("unmanaged type %s", fun)
 	}
 
-	return nil, fmt.Errorf("unmanaged type %s", fun)
+	e, err := parser(e, &j)
+	if err != nil {
+		return nil, err
+	}
+
+	e.ID, err = idFromJid(e.Jid)
+	if err != nil {
+		return nil, fmt.Errorf("unable to parse ID from Jid %s", e.Jid)
+	}
+
+	return e, nil
 }
 
 func parseHighstate(e *Event, j *gjson.Result) (*Event, error) {
@@ -74,4 +89,8 @@ func stringifyResults(results []gjson.Result) (arr []string) {
 		arr = append(arr, item.String())
 	}
 	return
+}
+
+func idFromJid(jid string) (string, error) {
+	return "", nil
 }
