@@ -15,12 +15,14 @@ func (db *Mold) Select(filter string, page, limit int) ([]_event.Event, error) {
 	defer tx.Rollback()
 
 	data, err := tx.GetAll(bucket)
+	// data, _, err := tx.PrefixSearchScan(bucket, []byte(""), "*", 0, 100)
 	if err != nil {
 		return []_event.Event{}, err
 	}
 
 	batch := []_event.Event{}
-	for _, entry := range data {
+	for i := len(data) - 1; i >= 0; i-- {
+		entry := data[i]
 		e := _event.Event{}
 		if err := _util.Unmarshal(entry.Value, &e); err != nil {
 			return []_event.Event{}, err
@@ -28,21 +30,23 @@ func (db *Mold) Select(filter string, page, limit int) ([]_event.Event, error) {
 
 		if filter == "" || e.Match(filter) {
 			batch = append(batch, e.Outline())
+			if len(batch) > limit*page+limit {
+				break
+			}
 		}
 	}
 
-	if len(batch) < limit*page {
-		return []_event.Event{}, nil
+	if len(batch) > limit*page {
+		batch = batch[limit*page:]
 	}
 
-	sort.Slice(batch, func(i, j int) bool {
-		return batch[i].Timestamp.After(batch[j].Timestamp)
-	})
-
-	batch = batch[limit*page:]
 	if len(batch) > limit {
 		batch = batch[:limit]
 	}
+
+	sort.Slice(batch, func(i, j int) bool {
+		return batch[i].Timestamp.Before(batch[j].Timestamp)
+	})
 
 	return batch, nil
 }
