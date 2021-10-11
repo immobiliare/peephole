@@ -37,7 +37,7 @@ func (k *Kiosk) eventsHandler(c *gin.Context) {
 		logrus.WithError(err).Warnln("Unable to select events")
 		c.JSON(http.StatusInternalServerError, []_event.Event{})
 	} else {
-		cnt, err := k.mold.Count()
+		cnt, err := k.mold.Count(filter)
 		if err != nil {
 			logrus.WithError(err).Errorln("Unable to count DB entries")
 		}
