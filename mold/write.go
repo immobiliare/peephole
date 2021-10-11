@@ -18,7 +18,7 @@ func (db *Mold) Write(e *_event.Event) error {
 			if err != nil {
 				return err
 			} else {
-				return tx.Put(bucket, []byte(e.Jid), bytes, r)
+				return tx.PutWithTimestamp(bucket, []byte(e.Jid), bytes, r, uint64(e.Timestamp.Unix()))
 			}
 		})
 }
