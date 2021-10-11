@@ -62,7 +62,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/streambinder/streambinder:latest
+          tags: ghcr.io/streambinder/peephole:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
