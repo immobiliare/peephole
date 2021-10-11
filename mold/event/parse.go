@@ -2,6 +2,8 @@ package event
 
 import (
 	"fmt"
+	"math/big"
+	"strings"
 	"time"
 
 	"github.com/tidwall/gjson"
@@ -9,7 +11,19 @@ import (
 
 const (
 	timestampLayout = "2006-01-02T15:04:05.000000"
+	timestampMaxStr = "99991231235959000000"
 )
+
+var (
+	timestampMax *big.Int
+)
+
+func init() {
+	var ok bool
+	if timestampMax, ok = new(big.Int).SetString(timestampMaxStr, 10); !ok {
+		panic("Unable to get big.Int instance from " + timestampMaxStr)
+	}
+}
 
 func Parse(endpoint, tag, data string) (*Event, error) {
 	if !gjson.Valid(data) {
@@ -36,6 +50,11 @@ func Parse(endpoint, tag, data string) (*Event, error) {
 	}
 
 	e, err := parser(e, &j)
+	if err != nil {
+		return nil, err
+	}
+
+	e.ID, err = id(e)
 	if err != nil {
 		return nil, err
 	}
@@ -84,4 +103,19 @@ func stringifyResults(results []gjson.Result) (arr []string) {
 		arr = append(arr, item.String())
 	}
 	return
+}
+
+func id(e *Event) (string, error) {
+	jid, ok := new(big.Int).SetString(strings.Split(e.Jid, "_")[0], 10)
+	if !ok {
+		return "", fmt.Errorf("unable to get big.Int instance from %s", e.Jid)
+	}
+
+	return fmt.Sprintf("%s_%s_%s_%s_%s",
+		big.NewInt(0).Sub(timestampMax, jid).String(),
+		e.Jid,
+		e.Function,
+		e.Minion,
+		strings.Join(e.Args, "-"),
+	), nil
 }

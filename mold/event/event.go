@@ -14,4 +14,5 @@ type Event struct {
 	Args      []string
 	Timestamp time.Time
 	Success   bool
+	ID        string
 }
