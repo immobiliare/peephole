@@ -111,11 +111,17 @@ func id(e *Event) (string, error) {
 		return "", fmt.Errorf("unable to get big.Int instance from %s", e.Jid)
 	}
 
-	return fmt.Sprintf("%s_%s_%s_%s_%s",
+	success := "success"
+	if !e.Success {
+		success = "failure"
+	}
+
+	return fmt.Sprintf("%s_%s_%s_%s_%s_%s",
 		big.NewInt(0).Sub(timestampMax, jid).String(),
 		e.Jid,
-		e.Function,
 		e.Minion,
+		e.Function,
 		strings.Join(e.Args, "-"),
+		success,
 	), nil
 }
