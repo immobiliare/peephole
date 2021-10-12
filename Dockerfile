@@ -15,4 +15,4 @@ EXPOSE 8080
 WORKDIR /app
 COPY --from=builder /app/peephole .
 CMD ["./peephole", "-c", "./configuration.yml"]
-LABEL org.opencontainers.image.source https://github.com/streambinder/peephole
+LABEL org.opencontainers.image.source=https://github.com/streambinder/peephole
