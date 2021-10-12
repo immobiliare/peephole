@@ -320,6 +320,7 @@ ul.event-list li div.event a.show {
   text-transform: uppercase;
   padding: 15px;
   border-radius: 5px;
+  background-color: var(--darker-bg);
 }
 
 ul.event-list li div.event a.show:hover {
