@@ -7,10 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr"
 	"github.com/sirupsen/logrus"
-	_min "github.com/streambinder/peephole/kiosk/minifier"
-	_mold "github.com/streambinder/peephole/mold"
-	_event "github.com/streambinder/peephole/mold/event"
-	_util "github.com/streambinder/peephole/util"
+	_min "github.com/immobiliare/peephole/kiosk/minifier"
+	_mold "github.com/immobiliare/peephole/mold"
+	_event "github.com/immobiliare/peephole/mold/event"
+	_util "github.com/immobiliare/peephole/util"
 )
 
 type Kiosk struct {

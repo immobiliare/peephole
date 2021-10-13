@@ -2,7 +2,7 @@ FROM golang:1.17 as builder
 ENV GO111MODULE=on
 ENV GOOS=linux
 ENV GOARCH=amd64
-WORKDIR /app
+WORKDIR /workspace
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
@@ -12,7 +12,8 @@ RUN go install github.com/gobuffalo/packr/packr@latest \
 
 FROM debian:buster
 EXPOSE 8080
-WORKDIR /app
-COPY --from=builder /app/peephole .
-CMD ["./peephole", "-c", "./configuration.yml"]
-LABEL org.opencontainers.image.source=https://github.com/streambinder/peephole
+WORKDIR /tmp
+COPY --from=builder /workspace/peephole /usr/sbin/
+RUN mkdir -p /var/spool/peephole
+CMD ["/usr/sbin/peephole"]
+LABEL org.opencontainers.image.source=https://github.com/immobiliare/peephole

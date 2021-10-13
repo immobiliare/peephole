@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
+	_util "github.com/immobiliare/peephole/util"
 	"github.com/sirupsen/logrus"
-	_util "github.com/streambinder/peephole/util"
 )
 
 const (

@@ -1,8 +1,8 @@
 package mold
 
 import (
-	_event "github.com/streambinder/peephole/mold/event"
-	_util "github.com/streambinder/peephole/util"
+	_event "github.com/immobiliare/peephole/mold/event"
+	_util "github.com/immobiliare/peephole/util"
 	"github.com/xujiajun/nutsdb"
 )
 

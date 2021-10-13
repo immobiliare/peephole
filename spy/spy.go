@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	_mold "github.com/streambinder/peephole/mold"
-	_event "github.com/streambinder/peephole/mold/event"
-	_salt "github.com/streambinder/peephole/salt"
-	_util "github.com/streambinder/peephole/util"
+	_mold "github.com/immobiliare/peephole/mold"
+	_event "github.com/immobiliare/peephole/mold/event"
+	_salt "github.com/immobiliare/peephole/salt"
+	_util "github.com/immobiliare/peephole/util"
 )
 
 type Spy struct {

@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	_util "github.com/streambinder/peephole/util"
+	_util "github.com/immobiliare/peephole/util"
 )
 
 // Config represents the config struct for Mold module

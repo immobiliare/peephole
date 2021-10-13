@@ -4,9 +4,9 @@ import (
 	"io/ioutil"
 	"os"
 
-	_kiosk "github.com/streambinder/peephole/kiosk"
-	_mold "github.com/streambinder/peephole/mold"
-	_spy "github.com/streambinder/peephole/spy"
+	_kiosk "github.com/immobiliare/peephole/kiosk"
+	_mold "github.com/immobiliare/peephole/mold"
+	_spy "github.com/immobiliare/peephole/spy"
 	"gopkg.in/yaml.v2"
 )
 

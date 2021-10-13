@@ -5,12 +5,12 @@ import (
 	"os"
 	"syscall"
 
+	_config "github.com/immobiliare/peephole/config"
+	_kiosk "github.com/immobiliare/peephole/kiosk"
+	_mold "github.com/immobiliare/peephole/mold"
+	_spy "github.com/immobiliare/peephole/spy"
+	_util "github.com/immobiliare/peephole/util"
 	"github.com/sirupsen/logrus"
-	_config "github.com/streambinder/peephole/config"
-	_kiosk "github.com/streambinder/peephole/kiosk"
-	_mold "github.com/streambinder/peephole/mold"
-	_spy "github.com/streambinder/peephole/spy"
-	_util "github.com/streambinder/peephole/util"
 )
 
 var (

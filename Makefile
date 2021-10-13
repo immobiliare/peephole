@@ -44,7 +44,7 @@ run: build
 	./$(BINARY_NAME) -c ./example.yml
 
 docker-run:
-	$(DOCKER) run -v ${PWD}/example.yml:/app/configuration.yml -p 8080:8080 -e CHANGEME_LOG_LEVEL=debug $(DOCKER_TAG)
+	$(DOCKER) run -v ${PWD}/example.yml:/etc/peephole -p 8080:8080 $(DOCKER_TAG)
 
 docker-push:
 	$(DOCKER) push $(DOCKER_TAG)

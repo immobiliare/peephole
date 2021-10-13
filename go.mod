@@ -1,4 +1,4 @@
-module github.com/streambinder/peephole
+module github.com/immobiliare/peephole
 
 go 1.16
 

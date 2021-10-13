@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	_event "github.com/streambinder/peephole/mold/event"
+	_event "github.com/immobiliare/peephole/mold/event"
 )
 
 type Pagination struct {
