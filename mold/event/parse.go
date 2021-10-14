@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gosimple/slug"
 	"github.com/tidwall/gjson"
 )
 
@@ -116,12 +117,12 @@ func id(e *Event) (string, error) {
 		success = "failure"
 	}
 
-	return fmt.Sprintf("%s_%s_%s_%s_%s_%s",
+	return slug.Make(fmt.Sprintf("%s_%s_%s_%s_%s_%s",
 		big.NewInt(0).Sub(timestampMax, jid).String(),
 		e.Jid,
 		e.Minion,
 		e.Function,
 		strings.Join(e.Args, "-"),
 		success,
-	), nil
+	)), nil
 }
