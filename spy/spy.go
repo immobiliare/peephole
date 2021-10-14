@@ -4,11 +4,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sirupsen/logrus"
 	_mold "github.com/immobiliare/peephole/mold"
 	_event "github.com/immobiliare/peephole/mold/event"
 	_salt "github.com/immobiliare/peephole/salt"
 	_util "github.com/immobiliare/peephole/util"
+	"github.com/sirupsen/logrus"
 )
 
 type Spy struct {
@@ -84,15 +84,11 @@ func (s *Spy) Watch() error {
 }
 
 func (s *Spy) spy(endpoint, token string, peephole chan *_salt.EventsResponse) error {
-	t := time.NewTicker(5 * time.Minute)
-	defer t.Stop()
-
-	for ; true; <-t.C {
+	for {
 		err := _salt.Events(endpoint, token, peephole)
 		if err != nil {
 			logrus.WithError(err).Warnln("Spying interrupted, retrying")
 		}
+		time.Sleep(1 * time.Minute)
 	}
-
-	return nil
 }
