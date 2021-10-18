@@ -9,6 +9,10 @@ Peephole is a web-based events explorer of SaltStack transactions.
 It can be used to watch for events on several SaltStack master nodes by GETting _from the_ `/events` API endpoint.
 As soon as events are watched, they get persisted into a local (auto-expiring and configurable) cache that allows to explore, filter and correlate events for a variable time interval.
 
+[![Peephole homepage](https://github.com/immobiliare/peephole/blob/master/.github/sample-1.png)](#peephole)
+
+[![Peephole detail](https://github.com/immobiliare/peephole/blob/master/.github/sample-2.png)](#peephole)
+
 ## Table of Contents
 
 - [Install](#install)
