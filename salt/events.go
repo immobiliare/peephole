@@ -82,8 +82,8 @@ func Events(endpoint, token string, peephole chan *EventsResponse) error {
 			block = []string{}
 		}
 	}
-	if scanner.Err() != nil {
-		return scanner.Err()
+	if err := scanner.Err(); err != nil {
+		return err
 	}
 
 	return nil
