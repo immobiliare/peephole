@@ -19,11 +19,10 @@ require (
 	github.com/tdewolff/minify/v2 v2.9.22
 	github.com/tdewolff/parse/v2 v2.5.22 // indirect
 	github.com/tidwall/gjson v1.9.4
-	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/ugorji/go v1.2.6 // indirect
 	github.com/xujiajun/nutsdb v0.6.0
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/sys v0.0.0-20211013075003-97ac67df715c // indirect
+	golang.org/x/sys v0.0.0-20211020064051-0ec99a608a1b // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
