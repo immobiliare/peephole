@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.6] - 2021-10-20
+### Fixed
+- Reconnecting to lost Salt master
+
+## [0.4.5] - 2021-10-14
+### Changed
+- Slugify Mold event IDs
+
+## [0.4.4] - 2021-10-14
+### Changed
+- Simplify spying retry mechanism
+
 ## [0.4.3] - 2021-10-12
 ### Changed
 - Enforce Kiosk show button background to prevent text overlap
@@ -87,7 +99,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - First dump
 
-[Unreleased]: https://github.com/immobiliare/peephole/compare/0.4.3...HEAD
+[Unreleased]: https://github.com/immobiliare/peephole/compare/0.4.6...HEAD
+[0.4.6]: https://github.com/immobiliare/peephole/releases/tag/0.4.6
+[0.4.5]: https://github.com/immobiliare/peephole/releases/tag/0.4.5
+[0.4.4]: https://github.com/immobiliare/peephole/releases/tag/0.4.4
 [0.4.3]: https://github.com/immobiliare/peephole/releases/tag/0.4.3
 [0.4.2]: https://github.com/immobiliare/peephole/releases/tag/0.4.2
 [0.4.1]: https://github.com/immobiliare/peephole/releases/tag/0.4.1
