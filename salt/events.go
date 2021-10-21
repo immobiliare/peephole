@@ -62,6 +62,10 @@ func Events(endpoint, token string, peephole chan *EventsResponse) error {
 	scanner.Buffer(make([]byte, 1024*1024), 128*1024*1024)
 	for scanner.Scan() {
 		line := strings.Trim(scanner.Text(), "\n ")
+		if strings.Contains(line, "401 Unauthorized") {
+			return fmt.Errorf("unauthorized: invalid token")
+		}
+
 		block = append(block, line)
 		if line == "" {
 			if response, err := unmarshal(block); err == nil {
