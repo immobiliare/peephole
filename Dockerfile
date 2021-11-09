@@ -1,4 +1,4 @@
-FROM golang:1.17 as builder
+FROM golang:alpine3.14 as builder
 ENV GO111MODULE=on
 ENV GOOS=linux
 ENV GOARCH=amd64
@@ -10,7 +10,7 @@ COPY . .
 RUN go install github.com/gobuffalo/packr/packr@latest \
  && make build
 
-FROM debian:buster
+FROM alpine:3.14
 EXPOSE 8080
 WORKDIR /tmp
 COPY --from=builder /workspace/peephole /usr/sbin/
