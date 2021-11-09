@@ -7,7 +7,7 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 COPY . .
-RUN apk --update add make \
+RUN apk --update --no-cache add make=4.3-r0 \
  && go install github.com/gobuffalo/packr/packr@latest \
  && make build
 
