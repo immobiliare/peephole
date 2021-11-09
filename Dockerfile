@@ -7,7 +7,8 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 COPY . .
-RUN go install github.com/gobuffalo/packr/packr@latest \
+RUN apk --update add make \
+ && go install github.com/gobuffalo/packr/packr@latest \
  && make build
 
 FROM alpine:3.14
