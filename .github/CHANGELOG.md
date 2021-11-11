@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.7] - 2021-11-09
+### Changed
+- Reduce container size by switching to Alpine
+### Fixed
+- Relogin on 401 on Master reconnection
+
 ## [0.4.6] - 2021-10-20
 ### Fixed
 - Reconnecting to lost Salt master
@@ -30,7 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Filter by success field
 
 ## [0.4.1] - 2021-10-11
-### Minor Mold typos
+### Fixed
+- Minor Mold typos
 
 ## [0.4.0] - 2021-10-11
 ### Changed
@@ -99,7 +106,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - First dump
 
-[Unreleased]: https://github.com/immobiliare/peephole/compare/0.4.6...HEAD
+[Unreleased]: https://github.com/immobiliare/peephole/compare/0.4.7...HEAD
+[0.4.7]: https://github.com/immobiliare/peephole/releases/tag/0.4.7
 [0.4.6]: https://github.com/immobiliare/peephole/releases/tag/0.4.6
 [0.4.5]: https://github.com/immobiliare/peephole/releases/tag/0.4.5
 [0.4.4]: https://github.com/immobiliare/peephole/releases/tag/0.4.4
