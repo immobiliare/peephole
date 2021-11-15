@@ -13,7 +13,7 @@ issues:
   exclude:
     - undeclared name
     - has no field or method
-    - Subprocess launched with function call as argument or cmd arguments
+    - Subprocess launched with a potential tainted input or cmd arguments
     - is unused
   exclude-rules:
     - path: _test\.go
