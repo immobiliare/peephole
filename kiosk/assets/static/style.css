@@ -11,7 +11,7 @@ html {
 
   color: var(--primary);
   background-color: var(--primary-bg);
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 body {
@@ -27,7 +27,7 @@ main {
 
 div.search button {
   border-radius: 7px;
-  font-family: 'Monospace', monospace;
+  font-family: monospace;
   color: var(--darker);
   position: absolute;
   top: 50%;
@@ -42,7 +42,7 @@ div.search button {
 }
 
 div.search button::after {
-  content: '\2a2f';
+  content: "\2a2f";
 }
 
 header {
@@ -81,13 +81,13 @@ header div.control-panel div.pager {
 header div.control-panel div.pager span {
   color: var(--darker);
   padding: 5px;
-  font-family: 'Monospace', monospace;
+  font-family: monospace;
   position: absolute;
   top: 50%;
   left: 55px;
   transform: translate(-50%, -50%);
   text-shadow: 1px 1px 0 var(--darkest-bg);
-  opacity: 0.75;
+  opacity: 75%;
 }
 
 div.search button:hover {
@@ -97,7 +97,7 @@ div.search button:hover {
 
 header div.control-panel div.pager button {
   border-radius: 50%;
-  font-family: 'Monospace', monospace;
+  font-family: monospace;
   color: var(--darker);
   border: medium none;
   background-color: var(--darker-bg);
@@ -120,7 +120,7 @@ header div.control-panel div.pager button.left {
 }
 
 header div.control-panel div.pager button.left::after {
-  content: '\2190';
+  content: "\2190";
   left: 5px;
 }
 
@@ -129,7 +129,7 @@ header div.control-panel div.pager button.right {
 }
 
 header div.control-panel div.pager button.right::after {
-  content: '\2192';
+  content: "\2192";
   right: 5px;
 }
 
@@ -186,13 +186,13 @@ div.event-dialog {
 
   /* animation */
   z-index: 0;
-  opacity: 0;
+  opacity: 0%;
   transition: opacity 100ms 100ms ease, z-index 100ms 100ms ease;
 }
 
 div.event-dialog.show {
   z-index: 10;
-  opacity: 1;
+  opacity: 100%;
   transition: opacity 100ms 100ms ease;
 }
 
@@ -213,7 +213,7 @@ div.event-dialog a.dismiss:hover {
 
 div.event-dialog pre {
   padding: 20px;
-  font-family: 'Monospace', monospace;
+  font-family: monospace;
 }
 
 div.event-dialog pre span.key {
@@ -253,7 +253,6 @@ div.event-dialog pre span.container {
   color: gray;
   white-space: pre;
   user-select: text;
-  -webkit-user-select: text;
 }
 
 ul.event-list {
@@ -344,7 +343,7 @@ header div.control-panel div.liveness.dead span {
 }
 
 .disabled {
-  opacity: 0.25;
+  opacity: 25%;
   filter: brightness(0.25);
 }
 
@@ -358,6 +357,6 @@ header div.control-panel div.liveness.dead span {
 
 @keyframes blinker {
   50% {
-    opacity: 0;
+    opacity: 0%;
   }
 }
