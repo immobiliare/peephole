@@ -87,7 +87,7 @@ header div.control-panel div.pager span {
   left: 55px;
   transform: translate(-50%, -50%);
   text-shadow: 1px 1px 0 var(--darkest-bg);
-  opacity: 75%;
+  opacity: 0.75;
 }
 
 div.search button:hover {
@@ -186,13 +186,13 @@ div.event-dialog {
 
   /* animation */
   z-index: 0;
-  opacity: 0%;
+  opacity: 0;
   transition: opacity 100ms 100ms ease, z-index 100ms 100ms ease;
 }
 
 div.event-dialog.show {
   z-index: 10;
-  opacity: 100%;
+  opacity: 1;
   transition: opacity 100ms 100ms ease;
 }
 
@@ -343,7 +343,7 @@ header div.control-panel div.liveness.dead span {
 }
 
 .disabled {
-  opacity: 25%;
+  opacity: 0.25;
   filter: brightness(0.25);
 }
 
@@ -357,6 +357,6 @@ header div.control-panel div.liveness.dead span {
 
 @keyframes blinker {
   50% {
-    opacity: 0%;
+    opacity: 0;
   }
 }
