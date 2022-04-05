@@ -1,6 +1,6 @@
 # Peephole <a href="#peephole"><img align="left" width="100px" src="https://github.com/immobiliare/peephole/blob/master/kiosk/assets/static/peephole.png"></a>
 
-[![pipeline status](https://github.com/immobiliare/peephole/actions/workflows/test.yml/badge.svg)](https://github.com/immobiliare/peephole/actions/workflows)
+[![pipeline status](https://github.com/immobiliare/peephole/actions/workflows/test.yml/badge.svg)](https://github.com/immobiliare/peephole/actions/workflows/test.yml)
 
 Peephole is a web-based events explorer of [SaltStack](https://github.com/saltstack/salt) transactions.
 
