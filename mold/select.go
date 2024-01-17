@@ -3,6 +3,7 @@ package mold
 import (
 	_event "github.com/immobiliare/peephole/mold/event"
 	_util "github.com/immobiliare/peephole/util"
+	"github.com/sirupsen/logrus"
 	"github.com/xujiajun/nutsdb"
 )
 
@@ -16,7 +17,12 @@ func (db *Mold) Select(filter string, page, limit int) ([]_event.Event, error) {
 	if err != nil {
 		return []_event.Event{}, err
 	}
-	defer tx.Rollback()
+	defer func() {
+		err := tx.Rollback()
+		if err != nil {
+			logrus.Debugln(err.Error())
+		}
+	}()
 
 	if filter != "" {
 		data, _, err = tx.PrefixSearchScan(bucket, []byte{}, filter, page*limit, limit)

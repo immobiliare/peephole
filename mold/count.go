@@ -1,6 +1,7 @@
 package mold
 
 import (
+	"github.com/sirupsen/logrus"
 	"github.com/xujiajun/nutsdb"
 )
 
@@ -14,7 +15,12 @@ func (db *Mold) Count(filter string) (int, error) {
 	if err != nil {
 		return -1, err
 	}
-	defer tx.Rollback()
+	defer func() {
+		err := tx.Rollback()
+		if err != nil {
+			logrus.Debugln(err.Error())
+		}
+	}()
 
 	if filter != "" {
 		data, _, err = tx.PrefixSearchScan(bucket, []byte{}, filter, 0, -1)
