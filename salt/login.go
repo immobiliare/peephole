@@ -3,10 +3,11 @@ package salt
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"io"
 
 	_util "github.com/immobiliare/peephole/util"
 	"github.com/sirupsen/logrus"
@@ -56,7 +57,7 @@ func Login(endpoint, user, pass, client string) (*LoginResponse, error) {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(io.Reader(resp.Body))
 	if err != nil {
 		return nil, err
 	}

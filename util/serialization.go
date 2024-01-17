@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/gob"
-	"io/ioutil"
+	"io"
 	"log"
 )
 
@@ -36,7 +36,7 @@ func Unmarshal(ser []byte, object interface{}) error {
 		return err
 	}
 
-	data, err := ioutil.ReadAll(gzipReader)
+	data, err := io.ReadAll(io.Reader(gzipReader))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,7 +1,6 @@
 package config
 
 import (
-	"io/ioutil"
 	"os"
 
 	_kiosk "github.com/immobiliare/peephole/kiosk"
@@ -26,7 +25,7 @@ func Parse(path string) (*Wrapper, error) {
 		return nil, err
 	}
 
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
