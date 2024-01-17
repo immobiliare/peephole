@@ -15,7 +15,7 @@ func (k *Kiosk) indexHandler(c *gin.Context) {
 		mimetype = "text/html"
 	)
 
-	html, err := k.templates.Find(template)
+	html, err := templates.ReadFile(template)
 	if err != nil {
 		logrus.WithError(err).WithField("jid", c.Param("jid")).Errorln("Unable to query event")
 		c.Status(http.StatusNotFound)

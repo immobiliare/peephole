@@ -1,24 +1,30 @@
 package kiosk
 
 import (
+	"embed"
+	"net/http"
 	"regexp"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
-	"github.com/gobuffalo/packr"
-	"github.com/sirupsen/logrus"
 	_min "github.com/immobiliare/peephole/kiosk/minifier"
 	_mold "github.com/immobiliare/peephole/mold"
 	_event "github.com/immobiliare/peephole/mold/event"
 	_util "github.com/immobiliare/peephole/util"
+	"github.com/sirupsen/logrus"
 )
+
+// go:embed assets/templates/**
+var templates embed.FS
+
+// go:embed assets/static/**
+var static embed.FS
 
 type Kiosk struct {
 	mold      *_mold.Mold
 	router    *gin.Engine
 	eventChan chan *_event.Event
 	config    *Config
-	templates packr.Box
 	minifier  *_min.FS
 }
 
@@ -35,8 +41,7 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 	k.mold = db
 	k.config = config
 	k.eventChan = eventChan
-	k.templates = packr.NewBox("assets/templates")
-	k.minifier = _min.Init(packr.NewBox("assets/static"))
+	k.minifier = _min.Init(http.FS(static))
 
 	k.router = gin.Default()
 	k.router.Use(gzip.Gzip(gzip.DefaultCompression))

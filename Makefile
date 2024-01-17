@@ -1,5 +1,4 @@
 GO ?= go
-PACKR ?= packr
 BINARY_NAME = peephole
 GOFLAGS :=
 STATIC := 1
@@ -35,7 +34,7 @@ deps:
 	$(GO) mod download
 
 build: deps
-	GOOS=linux GOARCH=amd64 $(PACKR) build $(GOFLAGS) -ldflags '$(LDFLAGS)' -v -o $(BINARY_NAME) .
+	GOOS=linux GOARCH=amd64 $(GO) build $(GOFLAGS) -ldflags '$(LDFLAGS)' -v -o $(BINARY_NAME) .
 
 docker-build:
 	$(DOCKER) build -t $(DOCKER_TAG) .
