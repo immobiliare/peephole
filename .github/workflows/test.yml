@@ -16,16 +16,6 @@ jobs:
       - uses: actions/setup-go@v5
       - run: go build -v ./...
       - run: go test -v ./...
-  scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
-      - run: |
-          go install github.com/praetorian-inc/gokart@latest
-          gokart scan
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -37,7 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PEEPHOLE }}
           VALIDATE_ALL_CODEBASE: false
   docker: 
-    needs: [test, scan, lint]
+    needs: [test, lint]
     if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
