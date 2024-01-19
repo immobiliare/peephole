@@ -1,4 +1,4 @@
-# Peephole <a href="#peephole"><img align="left" width="100px" src="https://github.com/immobiliare/peephole/blob/master/kiosk/assets/static/peephole.png"></a>
+# Peephole <a href="#peephole"><img align="left" width="100px" src="https://github.com/immobiliare/peephole/blob/master/kiosk/assets/peephole.png"></a>
 
 [![pipeline status](https://github.com/immobiliare/peephole/actions/workflows/test.yml/badge.svg)](https://github.com/immobiliare/peephole/actions/workflows/test.yml)
 
