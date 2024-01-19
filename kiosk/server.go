@@ -2,30 +2,24 @@ package kiosk
 
 import (
 	"embed"
-	"net/http"
 	"regexp"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
-	_min "github.com/immobiliare/peephole/kiosk/minifier"
 	_mold "github.com/immobiliare/peephole/mold"
 	_event "github.com/immobiliare/peephole/mold/event"
 	_util "github.com/immobiliare/peephole/util"
 	"github.com/sirupsen/logrus"
 )
 
-// go:embed assets/templates/**
-var templates embed.FS
-
-// go:embed assets/static/**
-var static embed.FS
+//go:embed assets
+var assets embed.FS
 
 type Kiosk struct {
 	mold      *_mold.Mold
 	router    *gin.Engine
 	eventChan chan *_event.Event
 	config    *Config
-	minifier  *_min.FS
 }
 
 func init() {
@@ -41,7 +35,6 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 	k.mold = db
 	k.config = config
 	k.eventChan = eventChan
-	k.minifier = _min.Init(http.FS(static))
 
 	k.router = gin.Default()
 	k.router.Use(gzip.Gzip(gzip.DefaultCompression))
@@ -60,8 +53,9 @@ func Init(db *_mold.Mold, eventChan chan *_event.Event, config *Config) *Kiosk {
 	if len(config.BasicAuth) > 0 {
 		group = k.router.Group("/", gin.BasicAuth(gin.Accounts(config.BasicAuth)))
 	}
-	group.StaticFS("/assets", k.minifier)
-	group.GET("/", k.indexHandler)
+
+	group.GET("/assets/:filename", k.staticHandler)
+	group.GET("/", k.staticHandler)
 	group.GET("/events", k.eventsHandler)
 	group.GET("/events/:jid", k.eventHandler)
 

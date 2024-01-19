@@ -3,11 +3,10 @@ package salt
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
-
-	"io"
 
 	_util "github.com/immobiliare/peephole/util"
 	"github.com/sirupsen/logrus"
