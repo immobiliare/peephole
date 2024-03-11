@@ -2,12 +2,11 @@ package mold
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/xujiajun/nutsdb"
 )
 
 func (db *Mold) Count(filter string) (int, error) {
 	var (
-		data nutsdb.Entries
+		data [][]byte
 		err  error
 	)
 
@@ -23,9 +22,9 @@ func (db *Mold) Count(filter string) (int, error) {
 	}()
 
 	if filter != "" {
-		data, _, err = tx.PrefixSearchScan(bucket, []byte{}, filter, 0, -1)
+		data, err = tx.PrefixSearchScan(bucket, []byte{}, filter, 0, -1)
 	} else {
-		data, _, err = tx.PrefixScan(bucket, []byte{}, 0, -1)
+		data, err = tx.PrefixScan(bucket, []byte{}, 0, -1)
 	}
 
 	if err != nil &&

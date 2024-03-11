@@ -26,7 +26,7 @@ func (db *Mold) Read(id string) (*_event.Event, error) {
 	}
 
 	e := new(_event.Event)
-	if err := _util.Unmarshal(data.Value, e); err != nil {
+	if err := _util.Unmarshal(data, e); err != nil {
 		return nil, err
 	}
 

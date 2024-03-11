@@ -4,12 +4,11 @@ import (
 	_event "github.com/immobiliare/peephole/mold/event"
 	_util "github.com/immobiliare/peephole/util"
 	"github.com/sirupsen/logrus"
-	"github.com/xujiajun/nutsdb"
 )
 
 func (db *Mold) Select(filter string, page, limit int) ([]_event.Event, error) {
 	var (
-		data nutsdb.Entries
+		data [][]byte
 		err  error
 	)
 
@@ -25,9 +24,9 @@ func (db *Mold) Select(filter string, page, limit int) ([]_event.Event, error) {
 	}()
 
 	if filter != "" {
-		data, _, err = tx.PrefixSearchScan(bucket, []byte{}, filter, page*limit, limit)
+		data, err = tx.PrefixSearchScan(bucket, []byte{}, filter, page*limit, limit)
 	} else {
-		data, _, err = tx.PrefixScan(bucket, []byte{}, page*limit, limit)
+		data, err = tx.PrefixScan(bucket, []byte{}, page*limit, limit)
 	}
 
 	if err != nil &&
@@ -40,7 +39,7 @@ func (db *Mold) Select(filter string, page, limit int) ([]_event.Event, error) {
 	batch := []_event.Event{}
 	for _, entry := range data {
 		e := _event.Event{}
-		if err := _util.Unmarshal(entry.Value, &e); err != nil {
+		if err := _util.Unmarshal(entry, &e); err != nil {
 			return []_event.Event{}, err
 		}
 		batch = append(batch, e.Outline())
