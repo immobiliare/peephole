@@ -41,7 +41,7 @@ require (
 	github.com/xujiajun/utils v0.0.0-20220904132955-5f7c5b914235 // indirect
 	golang.org/x/arch v0.9.0 // indirect
 	golang.org/x/crypto v0.26.0 // indirect
-	golang.org/x/net v0.27.0 // indirect
+	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/sys v0.23.0 // indirect
 	golang.org/x/text v0.17.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
