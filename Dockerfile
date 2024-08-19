@@ -1,4 +1,4 @@
-FROM golang:alpine3.19 as builder
+FROM golang:alpine3.20 as builder
 ENV GO111MODULE=on
 ENV GOOS=linux
 ENV GOARCH=amd64
@@ -9,7 +9,7 @@ RUN go mod download
 COPY . .
 RUN apk --update --no-cache add make && make build
 
-FROM alpine:3.19
+FROM alpine:3.20
 EXPOSE 8080
 WORKDIR /tmp
 COPY --from=builder /workspace/peephole /usr/sbin/
