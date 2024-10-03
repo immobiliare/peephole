@@ -9,6 +9,7 @@ on:
       - master
 
 jobs:
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -16,6 +17,7 @@ jobs:
       - uses: actions/setup-go@v5
       - run: go build -v ./...
       - run: go test -v ./...
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -26,6 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PEEPHOLE }}
           VALIDATE_ALL_CODEBASE: false
+
   docker: 
     needs: [test, lint]
     if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -44,3 +47,6 @@ jobs:
           context: .
           tags: ghcr.io/immobiliare/peephole:next
           push: true
+      - uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          token: ${{ secrets.GH_SRE_TOKEN }}
