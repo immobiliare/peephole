@@ -7,7 +7,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/gosimple/slug v1.14.0
 	github.com/sirupsen/logrus v1.9.3
-	github.com/tidwall/gjson v1.17.3
+	github.com/tidwall/gjson v1.18.0
 	github.com/xujiajun/nutsdb v0.11.1
 	gopkg.in/yaml.v2 v2.4.0
 )
