@@ -7,6 +7,7 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 COPY . .
+# hadolint ignore=DL3018
 RUN apk --update --no-cache add make && make build
 
 FROM alpine:3.21
