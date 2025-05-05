@@ -3,10 +3,10 @@ package config
 import (
 	"os"
 
+	"github.com/goccy/go-yaml"
 	_kiosk "github.com/immobiliare/peephole/kiosk"
 	_mold "github.com/immobiliare/peephole/mold"
 	_spy "github.com/immobiliare/peephole/spy"
-	"gopkg.in/yaml.v2"
 )
 
 // Wrapper represents the abstraction of the parsed

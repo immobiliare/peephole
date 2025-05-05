@@ -7,11 +7,11 @@ toolchain go1.24.2
 require (
 	github.com/gin-contrib/gzip v1.2.3
 	github.com/gin-gonic/gin v1.10.0
+	github.com/goccy/go-yaml v1.17.1
 	github.com/gosimple/slug v1.15.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/tidwall/gjson v1.18.0
 	github.com/xujiajun/nutsdb v0.11.1
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
