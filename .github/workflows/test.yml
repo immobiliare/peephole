@@ -45,6 +45,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: .
+          provenance: mode=max
           tags: ghcr.io/immobiliare/peephole:next
           push: true
       - uses: dataaxiom/ghcr-cleanup-action@v1
