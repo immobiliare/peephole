@@ -35,5 +35,6 @@ jobs:
         with:
           context: .
           provenance: mode=max
+          sbom: true
           tags: ${{ env.NEW_TAG }}, ${{ env.LATEST_TAG }}
           push: true

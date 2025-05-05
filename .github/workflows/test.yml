@@ -46,6 +46,7 @@ jobs:
         with:
           context: .
           provenance: mode=max
+          sbom: true
           tags: ghcr.io/immobiliare/peephole:next
           push: true
       - uses: dataaxiom/ghcr-cleanup-action@v1
