@@ -1,3 +1,16 @@
+## [0.5.1](https://github.com/immobiliare/peephole/compare/0.5.0...0.5.1) (2025-05-05)
+
+
+### Bug Fixes
+
+* **config:** replace unmaintained gopkg.in/yaml.v2 with github.com/goccy/go-yaml ([7aa755a](https://github.com/immobiliare/peephole/commit/7aa755a438f38f36e9450a149ad8f726f145b83e))
+* **linter:** remove deprecated linter configurations and update golangci-lint settings ([c969af9](https://github.com/immobiliare/peephole/commit/c969af9434b7a99f675f71a37266379fdfbc69b1))
+* **mold:** replace xujiajun/nutsdb with nutsdb/nutsdb ([abbe115](https://github.com/immobiliare/peephole/commit/abbe115405be4d343e27e72555ed1b9565d2352e))
+* **oci:** add missing provenance option to docker build-push action ([d079474](https://github.com/immobiliare/peephole/commit/d0794749eb7d811fe171127d67fee74c663b9c7b))
+* **oci:** add missing sbom option to docker build-push action ([cd801e5](https://github.com/immobiliare/peephole/commit/cd801e535b94c0c24d2f4138e8ff874d44dcd436))
+* **oci:** ignore hadolint for DL3007 ([0c35f87](https://github.com/immobiliare/peephole/commit/0c35f87bdfef6a03f85d7f08e46dd86b0cd96954))
+* **oci:** update dockerfile to use chainguard distroless base images ([7a87acd](https://github.com/immobiliare/peephole/commit/7a87acd8b142955b0ff784c4ae96b51c6e5b6f71))
+
 ## [0.5.0](https://github.com/immobiliare/peephole/compare/0.4.7...0.5.0) (2024-01-22)
 
 
