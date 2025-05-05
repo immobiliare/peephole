@@ -1,4 +1,3 @@
-# hadolint ignore=DL3007
 FROM cgr.dev/chainguard/go:latest as builder
 ENV CGO_ENABLED=0
 RUN mkdir -p /var/spool/peephole
@@ -9,12 +8,10 @@ RUN go mod download
 COPY . .
 RUN go build .
 
-# hadolint ignore=DL3007
 FROM ghcr.io/anchore/syft:latest AS sbomgen
 COPY --from=builder /workspace/peephole /usr/sbin/peephole
 RUN ["/syft", "--output", "spdx-json=/peephole.spdx.json", "/usr/sbin/peephole"]
 
-# hadolint ignore=DL3007
 FROM cgr.dev/chainguard/static:latest
 EXPOSE 8080
 WORKDIR /tmp
