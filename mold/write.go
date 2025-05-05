@@ -3,7 +3,7 @@ package mold
 import (
 	_event "github.com/immobiliare/peephole/mold/event"
 	_util "github.com/immobiliare/peephole/util"
-	"github.com/xujiajun/nutsdb"
+	"github.com/nutsdb/nutsdb"
 )
 
 func (db *Mold) Write(e *_event.Event) error {

@@ -3,8 +3,8 @@ package mold
 import (
 	_event "github.com/immobiliare/peephole/mold/event"
 	_util "github.com/immobiliare/peephole/util"
+	"github.com/nutsdb/nutsdb"
 	"github.com/sirupsen/logrus"
-	"github.com/xujiajun/nutsdb"
 )
 
 func (db *Mold) Select(filter string, page, limit int) ([]_event.Event, error) {
