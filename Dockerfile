@@ -10,14 +10,14 @@ RUN go build .
 
 FROM ghcr.io/anchore/syft:latest AS sbomgen
 COPY --from=builder /workspace/peephole /usr/sbin/peephole
-RUN ["/syft", "--output", "spdx-json=/peephole.spdx.json", "/usr/sbin/peephole"]
+RUN ["/syft", "--output", "spdx-json=/tmp/peephole.spdx.json", "/usr/sbin/peephole"]
 
 FROM cgr.dev/chainguard/static:latest
 EXPOSE 8080
 WORKDIR /tmp
 COPY --from=builder /workspace/peephole /usr/sbin/
 COPY --from=builder /var/spool/peephole /var/spool/peephole
-COPY --from=sbomgen /peephole.spdx.json /var/lib/db/sbom/peephole.spdx.json
+COPY --from=sbomgen /tmp/peephole.spdx.json /var/lib/db/sbom/peephole.spdx.json
 CMD ["/usr/sbin/peephole"]
 LABEL org.opencontainers.image.title="peephole"
 LABEL org.opencontainers.image.description="SaltStack transactions tracker"
