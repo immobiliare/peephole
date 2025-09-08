@@ -1,8 +1,8 @@
 module github.com/immobiliare/peephole
 
-go 1.24.0
+go 1.25.0
 
-toolchain go1.24.2
+toolchain go1.25.1
 
 require (
 	github.com/gin-contrib/gzip v1.2.3
