@@ -1,6 +1,6 @@
 module github.com/immobiliare/peephole
 
-go 1.23.0
+go 1.24.0
 
 toolchain go1.24.2
 
@@ -44,7 +44,7 @@ require (
 	github.com/ugorji/go/codec v1.3.0 // indirect
 	github.com/xujiajun/mmap-go v1.0.1 // indirect
 	github.com/xujiajun/utils v0.0.0-20220904132955-5f7c5b914235 // indirect
-	golang.org/x/arch v0.20.0 // indirect
+	golang.org/x/arch v0.21.0 // indirect
 	golang.org/x/crypto v0.41.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
 	golang.org/x/sys v0.35.0 // indirect
